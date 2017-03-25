@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="header" type="id" />
+    <item name="content" type="id" />
+    <item name="footer" type="id" />
+    <item name="rbAdmin" type="id" />
+    <item name="rbEmbloyee" type="id" />
+    <item name="rbgADminEmbloyee" type="id" />
+    <item name="spinnerNumberOption" type="id" />
+    <item name="rowListEditTExtQuestion" type="id" />
+    <item name="rowListCheckBoxtQuestion" type="id" />
+    <item name="buttonLogin" type="id" />
+</resources>

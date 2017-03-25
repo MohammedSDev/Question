@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Question</string>
+    <string name="admin">admin</string>
+    <string name="employee">embloyee</string>
+    <string name="login">LogIn</string>
+    <string name="btLogin">Login</string>
+    <string name="etPasswordHint">Password..</string>
+    <string name="etEmailHint">Email</string>
+    <string name="etNameHint">Username just in first login</string>
+    
+    
+    <string-array name="numberOptionAnswer">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+</resources>
