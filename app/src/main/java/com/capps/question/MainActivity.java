@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.capps.question.Login.AdminContentFrag;
 import com.capps.question.Login.User;
+import com.capps.question.Question.QuestionActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,RadioGroup.OnCheckedChangeListener  {
 
@@ -72,8 +73,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Login Button
         mManager=getFragmentManager();
         AppDataBase db = AppDataBase.getInstance(this);
+        //if Admin Logged
         if(mManager.findFragmentByTag(tagAdmin)!= null){
-
 
             if (mPass == null) {
                 findViewById(R.id.editTextPassword);
@@ -82,11 +83,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             if (db.checkAdminPass(mPass.getText().toString())){
 
-                //TODO::open question activity and put choices
+                Intent questionIntent=new Intent(this, QuestionActivity.class);
+                questionIntent.putExtra(QuestionActivity.IS_ADMIN_KEY,true);
+
+                startActivity(questionIntent);
             }
 
         }
+        //Employee Logged
         else{
+
             if (mEmail == null){
                 mEmail = (EditText) findViewById(R.id.editTextEmail);
                 mName = (EditText) findViewById(R.id.editTextName);
@@ -94,7 +100,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             User user = new User(mEmail.getText().toString(),mName.getText().toString());
             if(db.createUser(user)){
-//                //TODO::open question activity and start questions
+
+                Intent questionIntent=new Intent(this, QuestionActivity.class);
+                questionIntent.putExtra(QuestionActivity.IS_ADMIN_KEY,false);
+
+                startActivity(questionIntent);
             }
 
 
