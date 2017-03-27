@@ -15,18 +15,13 @@ import com.capps.question.R;
 
 public class Index extends ListFragment {
 
+    private Question [] questions;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
 
-        return inflater.inflate(R.layout.list,container,false);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-//        setListAdapter(new ArrayAdapter<String>(getActivity(),));
-    }
 }

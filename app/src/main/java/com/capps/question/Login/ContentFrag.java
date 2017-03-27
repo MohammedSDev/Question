@@ -30,4 +30,7 @@ public class ContentFrag extends Fragment {
         else
             View.inflate(getActivity(),R.layout.login_content_employee_frag,conteainer);
     }
+
+
+    
 }
