@@ -43,7 +43,8 @@ public class AppDataBase extends SQLiteOpenHelper {
         String command = "CREATE TABLE " + USER_T +" (id int PRIMARY KEY," +
                                                         USER_COLUMN_NAME + " VARCHAR(51)," +
                                                         USER_COLUMN_EMAIL + " VARCHAR(51)," +
-                                                        USER_COLUMN_ADMIN + " boolean)";
+                                                        USER_COLUMN_ADMIN + " boolean DEFAULT (FALSE)" +
+                                                        ");";
 
 
         db.execSQL(command);
@@ -52,6 +53,18 @@ public class AppDataBase extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+    }
+
+    private Cursor getRow(String sql){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql,null);
+        return cursor;
+    }
+
+    private Cursor getRow(String sql,String selection){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql,new String[] {selection});
+        return cursor;
     }
 
     //Users Method
@@ -82,6 +95,7 @@ public class AppDataBase extends SQLiteOpenHelper {
 
     }
 
+    //is new user
     public boolean isNewUser(User user){
         String command = "SELECT id FROM " + USER_T + "WHERE name = ?";
 
@@ -93,5 +107,16 @@ public class AppDataBase extends SQLiteOpenHelper {
         else
             return true; // mean not exisit in db
 
+    }
+
+    //check password login
+    public boolean checkAdminPass(String pass){
+        String command = "SELECT id FROM " + USER_T +
+                          " WHERE " +USER_COLUMN_NAME +" = ?";
+
+        if (getRow(command,pass).moveToFirst())
+            return true;
+        else
+            return false;
     }
 }

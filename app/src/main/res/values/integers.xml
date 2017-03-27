@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="maxEmailLength">51</integer>
+    <integer name="maxNameLength" >51</integer>
+</resources>

@@ -14,7 +14,7 @@ import com.capps.question.R;
  * Created by varun on 24/3/17.
  */
 
-public class ContentFrag extends Fragment {
+public class AdminContentFrag extends Fragment {
 
     @Nullable
     @Override
@@ -22,15 +22,4 @@ public class ContentFrag extends Fragment {
       return inflater.inflate(R.layout.login_content_admin_frag,container,false);
     }
 
-
-    public void changeLayout(boolean isAdmin, ViewGroup conteainer){
-        conteainer.removeAllViews();
-        if (isAdmin)
-             View.inflate(getActivity(),R.layout.login_content_admin_frag,conteainer);
-        else
-            View.inflate(getActivity(),R.layout.login_content_employee_frag,conteainer);
-    }
-
-
-    
 }

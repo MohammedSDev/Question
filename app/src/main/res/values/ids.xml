@@ -10,4 +10,7 @@
     <item name="rowListEditTExtQuestion" type="id" />
     <item name="rowListCheckBoxtQuestion" type="id" />
     <item name="buttonLogin" type="id" />
+    <item name="editTextPassword" type="id" />
+    <item name="editTextEmail" type="id" />
+    <item name="editTextName" type="id" />
 </resources>

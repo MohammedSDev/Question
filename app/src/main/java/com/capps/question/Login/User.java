@@ -9,6 +9,19 @@ public class User {
     private String name,email;
     private int id;
 
+
+    public User(Boolean admin, String email, String name) {
+        this.admin = admin;
+        this.email = email;
+        this.name = name;
+    }
+
+    public User( String email, String name) {
+        this.admin = false;
+        this.email = email;
+        this.name = name;
+    }
+
     public Boolean getAdmin() {
         return admin;
     }
