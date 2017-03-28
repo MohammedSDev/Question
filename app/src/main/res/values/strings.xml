@@ -12,6 +12,8 @@
     <string name="users">List Users</string>
     <string name="save">Save</string>
     <string name="errorPass">Error Password</string>
+    <string name="emptyShortQuestion">Should Write Question from 12 letter at less</string>
+    <string name="emptyAnswer">Should Write Answer.2 answer at less</string>
 
 
     <string-array name="numberOptionAnswer">

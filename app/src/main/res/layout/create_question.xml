@@ -14,7 +14,7 @@
             android:inputType="textPersonName"
             android:hint="Question"
             android:ems="10"
-            android:id="@+id/editText" />
+            android:id="@id/edutTextQuestion" />
         <Spinner
             android:layout_gravity="center_vertical"
             android:layout_width="0dp"

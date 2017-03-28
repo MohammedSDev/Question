@@ -26,7 +26,7 @@ public class QuestionAdapter extends BaseAdapter implements CompoundButton.OnChe
 
     private int mCount;
     private Context mContext;
-    private Answer [] mAnswers;
+     private Answer [] mAnswers;
 
     //Use this Constrictor when you dont have any pervaio answers(ex: new Question with new Answers)
     public QuestionAdapter(int mCount, Context mContext) {
@@ -39,7 +39,7 @@ public class QuestionAdapter extends BaseAdapter implements CompoundButton.OnChe
     //Use this Constrictor if you have Answer(ex: from saveInstanceState when phone over change OR from DB when you whant to edit answers)
     public QuestionAdapter(Context mContext, Answer[] mAnswers) {
         this.mContext = mContext;
-        this.mAnswers = mAnswers;
+        mAnswers = mAnswers;
         this.mCount = mAnswers.length;
     }
 
