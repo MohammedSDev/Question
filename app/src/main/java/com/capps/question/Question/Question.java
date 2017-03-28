@@ -3,6 +3,7 @@ package com.capps.question.Question;
 import android.content.ContentValues;
 import android.content.Context;
 
+import com.capps.question.Answer;
 import com.capps.question.AppDataBase;
 
 /**
@@ -38,6 +39,17 @@ public class Question {
         long rowID = db.saveQuestion(this);
 
         return rowID;
+    }
+
+
+    boolean save(Answer []answers){
+        long rowID = save();
+        boolean resuly = false;
+        if (rowID> 0){
+            AppDataBase db =AppDataBase.getInstance(mContext);
+            resuly = db.saveAnswer(answers,rowID);
+        }
+        return resuly;
     }
 
 

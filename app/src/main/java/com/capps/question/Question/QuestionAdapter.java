@@ -14,6 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.capps.question.Answer;
+import com.capps.question.MainActivity;
 import com.capps.question.R;
 
 import java.io.Serializable;
@@ -28,20 +29,24 @@ public class QuestionAdapter extends BaseAdapter implements CompoundButton.OnChe
     private Context mContext;
      private Answer [] mAnswers;
 
+    private static QuestionAdapter adapter;
+
     //Use this Constrictor when you dont have any pervaio answers(ex: new Question with new Answers)
-    public QuestionAdapter(int mCount, Context mContext) {
+    private QuestionAdapter(int mCount, Context mContext) {
         this.mCount = mCount;
         this.mContext = mContext;
         mAnswers = new Answer[mCount];
 
     }
 
-    //Use this Constrictor if you have Answer(ex: from saveInstanceState when phone over change OR from DB when you whant to edit answers)
-    public QuestionAdapter(Context mContext, Answer[] mAnswers) {
-        this.mContext = mContext;
-        mAnswers = mAnswers;
-        this.mCount = mAnswers.length;
+    public static QuestionAdapter getInstance(int mCount) {
+        if (adapter == null)
+            adapter=new QuestionAdapter(mCount,QuestionActivity.appContext);
+
+        return adapter;
     }
+
+
 
     @Override
     public int getCount() {

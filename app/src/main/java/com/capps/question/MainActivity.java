@@ -3,6 +3,7 @@ package com.capps.question;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import com.capps.question.Question.QuestionActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,RadioGroup.OnCheckedChangeListener {
 
+
     private FragmentManager mManager;
     private EditText mPass,mEmail,mName;
     private String tagAdmin = "admin", tagEmployee = "employee";
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
 
 
@@ -126,4 +129,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 setEmployeeContentFragment();break;
         }
     }
+
+
 }

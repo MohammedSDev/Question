@@ -34,12 +34,12 @@ public class Index extends ListFragment {
         super.onViewCreated(view, savedInstanceState);
 
         //TODO::get data from db
-        questions=new Question[10];
-        int i=1;
-        for (Question q : questions) {
-            q=new Question();
-            q.setQuestion("Q " + i++);
-        }
+//        questions=new Question[10];
+//        int i=1;
+//        for (Question q : questions) {
+//            q=new Question();
+//            q.setQuestion("Q " + i++);
+//        }
 
         setListAdapter(new ArrayAdapter<Question>(getActivity(),android.R.layout.simple_list_item_1,questions));
         getListView().setOnClickListener(new View.OnClickListener() {

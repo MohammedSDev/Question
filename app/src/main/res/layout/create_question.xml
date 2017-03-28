@@ -7,7 +7,9 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <!--TODO::Remove Background-->
         <EditText
+            android:background="@color/colorAccent"
             android:layout_width="0dp"
             android:layout_weight="8"
             android:layout_height="wrap_content"

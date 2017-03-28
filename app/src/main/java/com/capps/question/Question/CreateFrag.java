@@ -55,7 +55,7 @@ public class CreateFrag extends ListFragment implements AdapterView.OnItemSelect
 
         numberOptionsAnswer.setAdapter(ArrayAdapter.createFromResource(getActivity(),R.array.numberOptionAnswer,android.R.layout.simple_spinner_item));
         numberOptionsAnswer.setOnItemSelectedListener(this);
-        setListAdapter(new QuestionAdapter(0,getActivity()));
+        setListAdapter(QuestionAdapter.getInstance(0));
 
 
 
@@ -84,32 +84,47 @@ public class CreateFrag extends ListFragment implements AdapterView.OnItemSelect
     public void onClick(View v) {
         //Save Button clicked
 
+        /*Steps
+        * check Question
+        * get&check Answers
+        * save Question & Answers
+        * show message to user (Success|failed)*/
+
+        //check if editTExt Question not Empty and more than 11
         if (editTextQuestion.getText().toString().isEmpty() || editTextQuestion.getText().toString().length()<12){
             Toast.makeText(getActivity(),R.string.emptyShortQuestion,Toast.LENGTH_SHORT).show();
             return;
         }
 
+        //get answers from listAdapter and check it is not Empty and more then 1
         QuestionAdapter adapter = (QuestionAdapter) getListAdapter();
         Answer []answers= adapter.getData();
         if (answers.length<2){
-            Toast.makeText(getActivity(),R.string.emptyShortQuestion,Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),R.string.emptyAnswer,Toast.LENGTH_SHORT).show();
             return;
         }
         for (Answer a:answers) {
-            if (a.getAnswer().isEmpty() || a.getAnswer() == " "){
-                Toast.makeText(getActivity(),R.string.emptyShortQuestion,Toast.LENGTH_SHORT).show();
-                return;//TODO::check if loop stop or not
+            if (a.getAnswer().isEmpty() || a.getAnswer().equalsIgnoreCase(" ")){ //TODO:: equals > equals
+                Toast.makeText(getActivity(),R.string.emptyAnswer,Toast.LENGTH_SHORT).show();
+                return;
             }
         }
 
 
 
-        //Save Question in to the DB..and return rowID
+        //Save Question & Answers in to the DB..and return rowID
         Question question = new Question(getActivity());
         question.setQuestion(editTextQuestion.getText().toString());
-        long rowID = question.save();
+        boolean resulte = question.save(answers);
 
-        //save Answers..
+        //Show Message to User Save Success OR Save Failed
+        if (resulte){
+            Toast.makeText(getActivity(),R.string.saveQuestionAndAnswersSuccessful,Toast.LENGTH_SHORT).show(); //TODO::LENGTH_LONG
+        }
+        else
+        {
+            Toast.makeText(getActivity(),R.string.saveQuestionAndAnswersFailed,Toast.LENGTH_SHORT).show();
+        }
 
 
 
@@ -123,7 +138,7 @@ public class CreateFrag extends ListFragment implements AdapterView.OnItemSelect
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         int count = position + 1;
 
-        listView.setAdapter(new QuestionAdapter(count,getActivity()));
+        listView.setAdapter(QuestionAdapter.getInstance(count));
     }
 
     @Override

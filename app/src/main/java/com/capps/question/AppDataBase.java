@@ -20,6 +20,9 @@ import java.util.IllegalFormatException;
 
 public class AppDataBase extends SQLiteOpenHelper {
 
+
+    //TODO:: end transaction and close DB after any connection..
+
     private final static String DB_NAME = "QUESTION_DB";
     private static int DB_VERSION = 1;
     private static AppDataBase INSTANCE=null;
@@ -28,7 +31,7 @@ public class AppDataBase extends SQLiteOpenHelper {
     private final String USER_COLUMN_NAME = "name";
     private final String USER_COLUMN_EMAIL = "email";
     private final String USER_COLUMN_ADMIN = "admin";
-    private final String USER_COLUMN_PASS = "PASS";//TODO::PASS >> pass
+    private final String USER_COLUMN_PASS = "pass ";//TODO::PASS >> pass ...changed..?
 
     private final String QUESTION_T = "questions";
     private final String QUESTION_COLUMN_QUESTION= "question";
@@ -52,7 +55,7 @@ public class AppDataBase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String command = "CREATE TABLE " + USER_T +" (id int PRIMARY KEY," +//TODO:: rename >> createUserT
+        String createUserT = "CREATE TABLE " + USER_T +" (id int PRIMARY KEY," +
                                                         USER_COLUMN_NAME + " VARCHAR(51)," +
                                                         USER_COLUMN_EMAIL + " VARCHAR(51)," +
                                                         USER_COLUMN_PASS + "  VARCHAR(21)," +
@@ -72,7 +75,7 @@ public class AppDataBase extends SQLiteOpenHelper {
 
 
 
-        db.execSQL(command);
+        db.execSQL(createUserT);
         db.execSQL(insertAdmin);
         db.execSQL(createQuestionT);
         db.execSQL(createAnswerT);
@@ -81,7 +84,11 @@ public class AppDataBase extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-    //TODO:: now  :: update DB
+    //TODO:: now  :: update DB...drop and recreated....?
+//        db.execSQL("DROP TABLE IF EXISTS " + USER_T);
+        db.execSQL("DROP TABLE IF EXISTS " + QUESTION_T);
+        db.execSQL("DROP TABLE IF EXISTS " + ANSWER_T);
+        onCreate(db);
 
     }
 
@@ -169,14 +176,38 @@ public class AppDataBase extends SQLiteOpenHelper {
 
 
     //Answer Method
-    public long saveAnswer(Answer []answers){
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        String sql = "INSERT INTO " +
-////        ContentValues values=new ContentValues();
-//        SQLiteStatement statement = db.compileStatement()
-//
-//        for (Answer answer :answers) {
-//
-//        }
+    public boolean saveAnswer(Answer []answers,long question_id){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        String sql = "INSERT INTO " + ANSWER_T + " VALUES (?,?,?)";
+        SQLiteStatement statement = db.compileStatement(sql);
+        short c ;  //TODO::  short >> byte  (for memory)
+
+        try {
+
+            db.beginTransaction();
+            for (Answer answer :answers) {
+                statement.clearBindings();
+                c= answer.isCurrect()? (short) 1 : (short) 0;
+                statement.bindString(1,answer.getAnswer());
+                statement.bindLong(2,question_id);
+                statement.bindLong(3,c);
+                statement.executeInsert();
+            }
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            Log.d("dbError",e.getMessage());
+            return false;
+        }
+        finally
+        {
+            statement.close();
+            db.setTransactionSuccessful();
+            db.endTransaction();
+            db.close();
+        }
     }
 }
