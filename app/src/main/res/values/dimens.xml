@@ -6,4 +6,5 @@
     <dimen name="ButtonTextSize">21sp</dimen>
     <dimen name="EditTextSize">21sp</dimen>
     <dimen name="loginContentEmployeeEditTextNameMarginTop">2dp</dimen>
+    <dimen name="adminOPtionButtonMargin">3dp</dimen>
 </resources>

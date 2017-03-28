@@ -25,6 +25,7 @@ public class AppDataBase extends SQLiteOpenHelper {
     private final String USER_COLUMN_NAME = "name";
     private final String USER_COLUMN_EMAIL = "email";
     private final String USER_COLUMN_ADMIN = "admin";
+    private final String USER_COLUMN_PASS = "PASS";//TODO::PASS >> pass
 
     private AppDataBase(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -43,15 +44,20 @@ public class AppDataBase extends SQLiteOpenHelper {
         String command = "CREATE TABLE " + USER_T +" (id int PRIMARY KEY," +
                                                         USER_COLUMN_NAME + " VARCHAR(51)," +
                                                         USER_COLUMN_EMAIL + " VARCHAR(51)," +
-                                                        USER_COLUMN_ADMIN + " boolean DEFAULT (FALSE)" +
+                                                        USER_COLUMN_PASS + "  VARCHAR(21)," +
+                                                        USER_COLUMN_ADMIN + " boolean DEFAULT (0)" +
                                                         ");";
-
+        String insertAdmin = "INSERT INTO " + USER_T + " (" + USER_COLUMN_NAME + "," + USER_COLUMN_PASS + "," + USER_COLUMN_ADMIN + ")" +
+                "VALUES ('ADMIN','12345',1)";
 
         db.execSQL(command);
+        db.execSQL(insertAdmin);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+
 
     }
 
@@ -112,7 +118,7 @@ public class AppDataBase extends SQLiteOpenHelper {
     //check password login
     public boolean checkAdminPass(String pass){
         String command = "SELECT id FROM " + USER_T +
-                          " WHERE " +USER_COLUMN_NAME +" = ?";
+                          " WHERE " +USER_COLUMN_PASS +" = ?";
 
         if (getRow(command,pass).moveToFirst())
             return true;

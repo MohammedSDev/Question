@@ -13,10 +13,11 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.capps.question.Login.AdminContentFrag;
+import com.capps.question.Login.EmployeeContentFrag;
 import com.capps.question.Login.User;
 import com.capps.question.Question.QuestionActivity;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener,RadioGroup.OnCheckedChangeListener  {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,RadioGroup.OnCheckedChangeListener {
 
     private FragmentManager mManager;
     private EditText mPass,mEmail,mName;
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
 
         Button login = (Button) findViewById(R.id.buttonLogin);
@@ -60,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (mManager.findFragmentByTag(tagEmployee) == null) {
             FragmentTransaction transaction = mManager.beginTransaction();
-            transaction.replace(R.id.content, new AdminContentFrag(), tagEmployee);
+            transaction.replace(R.id.content, new EmployeeContentFrag(), tagEmployee);
             transaction.commit();
         }
     }
@@ -77,17 +80,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(mManager.findFragmentByTag(tagAdmin)!= null){
 
             if (mPass == null) {
-                findViewById(R.id.editTextPassword);
+               mPass = (EditText) findViewById(R.id.editTextPassword);
             }
 
 
-            if (db.checkAdminPass(mPass.getText().toString())){
+            if (mPass.getText() != null && db.checkAdminPass(mPass.getText().toString())){
 
                 Intent questionIntent=new Intent(this, QuestionActivity.class);
                 questionIntent.putExtra(QuestionActivity.IS_ADMIN_KEY,true);
 
                 startActivity(questionIntent);
-            }
+            }else
+                Toast.makeText(this,R.string.errorPass,Toast.LENGTH_SHORT).show();
 
         }
         //Employee Logged

@@ -7,8 +7,13 @@
     <string name="etPasswordHint">Password..</string>
     <string name="etEmailHint">Email</string>
     <string name="etNameHint">Username just in first login</string>
-    
-    
+    <string name="newQuestion">new Question</string>
+    <string name="listAllQues">list All Question</string>
+    <string name="users">List Users</string>
+    <string name="save">Save</string>
+    <string name="errorPass">Error Password</string>
+
+
     <string-array name="numberOptionAnswer">
         <item>1</item>
         <item>2</item>

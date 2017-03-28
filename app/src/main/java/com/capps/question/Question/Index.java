@@ -24,4 +24,30 @@ public class Index extends ListFragment {
 
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.list,container,false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        //TODO::get data from db
+        questions=new Question[10];
+        int i=1;
+        for (Question q : questions) {
+            q=new Question();
+            q.setQuestion("Q " + i++);
+        }
+
+        setListAdapter(new ArrayAdapter<Question>(getActivity(),android.R.layout.simple_list_item_1,questions));
+        getListView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //
+
+            }
+        });
+    }
 }

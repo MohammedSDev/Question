@@ -13,4 +13,8 @@
     <item name="editTextPassword" type="id" />
     <item name="editTextEmail" type="id" />
     <item name="editTextName" type="id" />
+    <item name="questionActivity" type="id">QuestionActivity</item>
+    <item name="buttonSaveNewQuestion" type="id">buttonSaveNewQuestion</item>
+    <item name="buttonListAllQues" type="id">buttonListAllQues</item>
+    <item name="buttonUsers" type="id">buttonUsers</item>
 </resources>
