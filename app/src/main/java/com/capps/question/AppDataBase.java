@@ -24,7 +24,7 @@ public class AppDataBase extends SQLiteOpenHelper {
     //TODO:: end transaction and close DB after any connection..
 
     private final static String DB_NAME = "QUESTION_DB";
-    private static int DB_VERSION = 1;
+    private static int DB_VERSION = 2;
     private static AppDataBase INSTANCE=null;
 
     private final String USER_T = "users";
@@ -75,7 +75,7 @@ public class AppDataBase extends SQLiteOpenHelper {
 
 
 
-        db.execSQL(createUserT);
+//        db.execSQL(createUserT);//TODO::cancle Comment
         db.execSQL(insertAdmin);
         db.execSQL(createQuestionT);
         db.execSQL(createAnswerT);
@@ -85,7 +85,7 @@ public class AppDataBase extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     //TODO:: now  :: update DB...drop and recreated....?
-//        db.execSQL("DROP TABLE IF EXISTS " + USER_T);
+//        db.execSQL("DROP TABLE IF EXISTS " + USER_T);//TODO::cancle Comment
         db.execSQL("DROP TABLE IF EXISTS " + QUESTION_T);
         db.execSQL("DROP TABLE IF EXISTS " + ANSWER_T);
         onCreate(db);
@@ -104,6 +104,14 @@ public class AppDataBase extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public Cursor getAllTable(String tableName){
+        String sql = "SELECT * FROM " + tableName;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql,null);
+        return cursor;
+    }
+
+
     //Users Method
 
     //create
@@ -120,6 +128,7 @@ public class AppDataBase extends SQLiteOpenHelper {
             db.beginTransaction();
             int result = (int) db.insertOrThrow(USER_T,null,values);
             db.setTransactionSuccessful();
+            db.endTransaction();
 
             if (result >= 0)
                 return true;
@@ -169,6 +178,7 @@ public class AppDataBase extends SQLiteOpenHelper {
         db.beginTransaction();
         rowID = db.insertOrThrow(QUESTION_T, null,values);
         db.setTransactionSuccessful();
+        db.endTransaction();
 
         return rowID;
     }
@@ -179,7 +189,9 @@ public class AppDataBase extends SQLiteOpenHelper {
     public boolean saveAnswer(Answer []answers,long question_id){
 
         SQLiteDatabase db = this.getWritableDatabase();
-        String sql = "INSERT INTO " + ANSWER_T + " VALUES (?,?,?)";
+        String sql = "INSERT INTO " + ANSWER_T + "(" + ANSWER_COLUMN_ANSWER+ "," +
+                                                        ANSWER_COLUMN_QUESTION_ID + "," +
+                                                        ANSWER_COLUMN_CURRECT + ") VALUES (?,?,?)";
         SQLiteStatement statement = db.compileStatement(sql);
         short c ;  //TODO::  short >> byte  (for memory)
 
@@ -194,7 +206,7 @@ public class AppDataBase extends SQLiteOpenHelper {
                 statement.bindLong(3,c);
                 statement.executeInsert();
             }
-
+            db.setTransactionSuccessful();
             return true;
         }
         catch (Exception e)
@@ -205,7 +217,6 @@ public class AppDataBase extends SQLiteOpenHelper {
         finally
         {
             statement.close();
-            db.setTransactionSuccessful();
             db.endTransaction();
             db.close();
         }

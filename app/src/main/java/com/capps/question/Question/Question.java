@@ -34,6 +34,7 @@ public class Question {
     }
 
 
+    //save Question only
     long save(){
         AppDataBase db = AppDataBase.getInstance(mContext);
         long rowID = db.saveQuestion(this);
@@ -42,6 +43,7 @@ public class Question {
     }
 
 
+    //save Question & Answers
     boolean save(Answer []answers){
         long rowID = save();
         boolean resuly = false;

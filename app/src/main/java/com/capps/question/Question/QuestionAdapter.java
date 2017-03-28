@@ -27,24 +27,17 @@ public class QuestionAdapter extends BaseAdapter implements CompoundButton.OnChe
 
     private int mCount;
     private Context mContext;
-     private Answer [] mAnswers;
+    private Answer [] mAnswers;
 
-    private static QuestionAdapter adapter;
 
     //Use this Constrictor when you dont have any pervaio answers(ex: new Question with new Answers)
-    private QuestionAdapter(int mCount, Context mContext) {
+    public QuestionAdapter(int mCount, Context mContext) {
         this.mCount = mCount;
         this.mContext = mContext;
         mAnswers = new Answer[mCount];
 
     }
 
-    public static QuestionAdapter getInstance(int mCount) {
-        if (adapter == null)
-            adapter=new QuestionAdapter(mCount,QuestionActivity.appContext);
-
-        return adapter;
-    }
 
 
 
@@ -136,6 +129,7 @@ public class QuestionAdapter extends BaseAdapter implements CompoundButton.OnChe
     class Holder {
         EditText editText;
         CheckBox checkBox;
+
         }
 
 
