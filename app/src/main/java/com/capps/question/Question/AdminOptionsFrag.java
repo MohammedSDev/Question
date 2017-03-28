@@ -57,7 +57,9 @@ public class AdminOptionsFrag extends Fragment implements View.OnClickListener {
         AdminOPtionInterface host= (AdminOPtionInterface) getActivity();
 
         switch (v.getId()){
-            case R.id.buttonSaveNewQuestion: host.changeFragment(new CreateFrag());
+            case R.id.buttonSaveNewQuestion: host.changeFragment(new CreateFrag());break;
+            case R.id.buttonListAllQues:host.changeFragment(new Index());break;
+            //TODO:: add User Fragment.
         }
     }
 

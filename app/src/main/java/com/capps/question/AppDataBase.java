@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
-import android.support.v4.app.NavUtils;
 import android.util.Log;
 
 import com.capps.question.Login.User;
@@ -22,6 +21,7 @@ public class AppDataBase extends SQLiteOpenHelper {
 
 
     //TODO:: end transaction and close DB after any connection..
+    public static final String ID_COLUMN="id";
 
     private final static String DB_NAME = "QUESTION_DB";
     private static int DB_VERSION = 2;
@@ -33,8 +33,8 @@ public class AppDataBase extends SQLiteOpenHelper {
     private final String USER_COLUMN_ADMIN = "admin";
     private final String USER_COLUMN_PASS = "pass ";//TODO::PASS >> pass ...changed..?
 
-    private final String QUESTION_T = "questions";
-    private final String QUESTION_COLUMN_QUESTION= "question";
+    public static final String QUESTION_T = "questions";
+    public static final String QUESTION_COLUMN_QUESTION= "question";
 
     private final String ANSWER_T = "answers";
     private final String ANSWER_COLUMN_ANSWER= "answer";
@@ -101,6 +101,18 @@ public class AppDataBase extends SQLiteOpenHelper {
     private Cursor getRow(String sql,String selection){
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(sql,new String[] {selection});
+        return cursor;
+    }
+
+    public Cursor getCoulmnTable(String tableName,String column,boolean includeIdCoumn){
+        String sql;
+        if (includeIdCoumn){
+            sql = "SELECT id," + column + " FROM " + tableName;
+        }else {
+            sql = "SELECT " + column + " FROM " + tableName;
+        }
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql,null);
         return cursor;
     }
 
@@ -174,7 +186,7 @@ public class AppDataBase extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values=new ContentValues();
-        values.put(QUESTION_COLUMN_QUESTION,q.getQuestion());
+        values.put(QUESTION_COLUMN_QUESTION,q.getmQuestion());
         db.beginTransaction();
         rowID = db.insertOrThrow(QUESTION_T, null,values);
         db.setTransactionSuccessful();

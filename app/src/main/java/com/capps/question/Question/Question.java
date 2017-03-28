@@ -1,7 +1,7 @@
 package com.capps.question.Question;
 
-import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 
 import com.capps.question.Answer;
 import com.capps.question.AppDataBase;
@@ -14,23 +14,39 @@ public class Question {
 
     private Context mContext;
 
+    public int getmId() {
+        return mId;
+    }
+
+    public void setmId(int mId) {
+        this.mId = mId;
+    }
+
+    private String mQuestion;
+    private int mId;
+
+
+
     public Question(Context context) {
         mContext=context;
     }
 
-    private String question;
 
-    public String getQuestion() {
-        return question;
+
+
+
+
+    public String getmQuestion() {
+        return mQuestion;
     }
 
-    public void setQuestion(String question) {
-        this.question = question;
+    public void setmQuestion(String mQuestion) {
+        this.mQuestion = mQuestion;
     }
 
     @Override
     public String toString() {
-        return question;
+        return mQuestion;
     }
 
 
@@ -53,6 +69,30 @@ public class Question {
         }
         return resuly;
     }
+
+
+    public static Question []allQuestion(Context context){
+        Cursor values;
+        Question [] questions;
+        int counter = 0;
+
+        AppDataBase db = AppDataBase.getInstance(context);
+        values = db.getAllTable(AppDataBase.QUESTION_T);
+        questions=new Question[values.getCount()];
+
+        if (values.moveToFirst()){
+            do {
+                questions[counter]=new Question(context);
+                questions[counter].setmId(values.getInt(values.getColumnIndex(AppDataBase.ID_COLUMN)));
+                questions[counter].setmQuestion(values.getString(values.getColumnIndex(AppDataBase.QUESTION_COLUMN_QUESTION)));
+                counter++;
+            }while (values.moveToNext());
+        }
+
+        return questions;
+
+    }
+
 
 
 }

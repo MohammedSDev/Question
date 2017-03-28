@@ -3,7 +3,6 @@ package com.capps.question.Question;
 
 import android.app.ListFragment;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +16,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.capps.question.Answer;
-import com.capps.question.AppDataBase;
 import com.capps.question.R;
 
 /**
@@ -107,7 +105,7 @@ public class CreateFrag extends ListFragment implements AdapterView.OnItemSelect
 
         //Save Question & Answers in to the DB..and return rowID
         Question question = new Question(getActivity());
-        question.setQuestion(editTextQuestion.getText().toString());
+        question.setmQuestion(editTextQuestion.getText().toString());
         boolean resulte = question.save(answers);
 
         //Show Message to User Save Success OR Save Failed

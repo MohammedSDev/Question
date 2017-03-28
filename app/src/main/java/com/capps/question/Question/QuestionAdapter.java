@@ -48,7 +48,8 @@ public class QuestionAdapter extends BaseAdapter implements CompoundButton.OnChe
 
     @Override
     public Object getItem(int position) {
-        return null;
+
+        return mAnswers[position];
     }
 
     @Override
