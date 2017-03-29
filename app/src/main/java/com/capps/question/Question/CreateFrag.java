@@ -1,7 +1,9 @@
 package com.capps.question.Question;
 
 
-import android.app.ListFragment;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -11,10 +13,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import com.capps.question.Answer;
 import com.capps.question.R;
 
@@ -22,19 +22,28 @@ import com.capps.question.R;
  * Created by varun on 24/3/17.
  */
 
-public class CreateFrag extends ListFragment implements AdapterView.OnItemSelectedListener,View.OnClickListener{
+public class CreateFrag extends Fragment implements AdapterView.OnItemSelectedListener,View.OnClickListener{
 
-     private ListView listView;
-     private final String ANSWER_USER_TYPE_KEY="dataAnswer";
-     EditText editTextQuestion;
 
-    QuestionAdapter mQuestionAdapter;
+//    private final String ANSWER_USER_TYPE_KEY="dataAnswer";
+    EditText editTextQuestion;
+    FragmentManager mManager;
+    private ListAnswerFrag mListAnswerFrag;
+
+
+
+
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.create_question,container,false);
+
+        //TODO::To check:  when no data past to onsaveInstanceState..is it came null or not
+        mManager = getChildFragmentManager();
+        mListAnswerFrag = new ListAnswerFrag();
+        changeFragment(mListAnswerFrag,0);
 
         Spinner numberOptionsAnswer = (Spinner) view.findViewById(R.id.spinnerNumberOption);
         Button buttonSave = (Button) view.findViewById(R.id.buttonSaveNewQuestion);
@@ -44,8 +53,7 @@ public class CreateFrag extends ListFragment implements AdapterView.OnItemSelect
         numberOptionsAnswer.setAdapter(ArrayAdapter.createFromResource(getActivity(),R.array.numberOptionAnswer,android.R.layout.simple_spinner_item));
         numberOptionsAnswer.setOnItemSelectedListener(this);
         //setListAdapter(QuestionAdapter.getInstance(0));
-        mQuestionAdapter=new QuestionAdapter(0,getActivity());
-        setListAdapter(mQuestionAdapter);
+
 
 
         buttonSave.setOnClickListener(this);
@@ -53,10 +61,28 @@ public class CreateFrag extends ListFragment implements AdapterView.OnItemSelect
         return  view;
     }
 
+    private void changeFragment(ListAnswerFrag frag,int editTextCount) {
+        Bundle bundle=new Bundle();
+        bundle.putInt(ListAnswerFrag.EDITTEXT_COUNT_KEY,editTextCount);
+        frag.setArguments(bundle);
+        FragmentTransaction transaction = mManager.beginTransaction();
+        transaction.replace(R.id.content,frag);
+        transaction.commit();
+    }
+//    private void changeFragment(int editTextCount) {
+//        mListAnswerFrag = new ListAnswerFrag();
+//        Bundle bundle=new Bundle();
+//        bundle.putInt(ListAnswerFrag.EDITTEXT_COUNT_KEY,editTextCount);
+//        mListAnswerFrag.setArguments(bundle);
+//        FragmentTransaction transaction = mManager.beginTransaction();
+//        transaction.replace(R.id.content,mListAnswerFrag);
+//        transaction.commit();
+//    }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        listView = getListView();
+
     }
 
 
@@ -89,7 +115,9 @@ public class CreateFrag extends ListFragment implements AdapterView.OnItemSelect
         //get answers from listAdapter and check it is not Empty and more then 1
      //   QuestionAdapter adapter = (QuestionAdapter) getListAdapter(); //TODO::ERROR ::this don't get current adapter.why?
 
-        Answer []answers= mQuestionAdapter.getData();
+
+//        Answer []answers = mManager.findFragmentByTag(R.id.content).getdata//TODO:: create getData Method
+        Answer []answers= mListAnswerFrag.mQuestionAdapter.getData();
         if (answers.length<2){
             Toast.makeText(getActivity(),R.string.emptyAnswer,Toast.LENGTH_SHORT).show();
             return;
@@ -128,8 +156,8 @@ public class CreateFrag extends ListFragment implements AdapterView.OnItemSelect
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         int count = position + 1;
-        mQuestionAdapter=new QuestionAdapter(count,getActivity());
-        listView.setAdapter(mQuestionAdapter);
+        mListAnswerFrag = new ListAnswerFrag();
+        changeFragment(mListAnswerFrag,count);
     }
 
     @Override

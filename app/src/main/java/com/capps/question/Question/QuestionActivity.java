@@ -59,7 +59,10 @@ public class QuestionActivity extends Activity implements AdminOptionsFrag.Admin
     @Override
     public void changeFragment(Fragment newFragment) {
         FragmentTransaction transaction = mManager.beginTransaction();
-        transaction.replace(R.id.questionActivity,newFragment); //TODO::add to back stack
+        transaction.replace(R.id.questionActivity,newFragment); //TODO::todo:: add to back stack
         transaction.commit();
     }
 }
+
+
+//TODO::Clear password after clickButton
