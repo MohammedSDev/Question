@@ -24,8 +24,7 @@ public class ListAnswerFrag extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-//        Answer []answers=null;
-//        int count=2;
+
         int count = getArguments().getInt(EDITTEXT_COUNT_KEY);
         Answer []answers = (Answer[]) getArguments().getSerializable(ANSWER_DATA_KEY); //TODO:: Should Throw Exception..Beacuse it's not..Serializable
         if (answers != null)

@@ -92,7 +92,7 @@ public class AppDataBase extends SQLiteOpenHelper {
 
     }
 
-    private Cursor getRow(String sql){
+    public Cursor getRow(String sql){
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(sql,null);
         return cursor;
@@ -107,9 +107,9 @@ public class AppDataBase extends SQLiteOpenHelper {
     public Cursor getCoulmnTable(String tableName,String column,boolean includeIdCoumn){
         String sql;
         if (includeIdCoumn){
-            sql = "SELECT id," + column + " FROM " + tableName;
+            sql = "SELECT id," + column + " FROM " + tableName + " ORDER BY " + ID_COLUMN;
         }else {
-            sql = "SELECT " + column + " FROM " + tableName;
+            sql = "SELECT " + column + " FROM " + tableName + " ORDER BY " + ID_COLUMN;
         }
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(sql,null);
@@ -117,14 +117,14 @@ public class AppDataBase extends SQLiteOpenHelper {
     }
 
     public Cursor getAllTable(String tableName){
-        String sql = "SELECT * FROM " + tableName;
+        String sql = "SELECT * FROM " + tableName + " ORDER BY " + ID_COLUMN;
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(sql,null);
         return cursor;
     }
 
     public Cursor getAllTable(String tableName,String whereClassColumnName,String whereClassIdValue){
-        String sql = "SELECT * FROM " + tableName + " WHERE " + whereClassColumnName + " = ?";
+        String sql = "SELECT * FROM " + tableName + " WHERE " + whereClassColumnName + " = ?" + " ORDER BY " + ID_COLUMN;
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(sql,new String[]{whereClassIdValue + ""});
         return cursor;

@@ -20,6 +20,9 @@
     <string name="emailEmpty">You have To Enter Your Email</string>
     <string name="emailName">You have To Enter Your Name</string>
     <string name="welcome">Welcome</string>
+    <string name="next">Next</string>
+    <string name="choiceAtLessOneAnswer">Choice At less one answer</string>
+
 
 
     <string-array name="numberOptionAnswer">

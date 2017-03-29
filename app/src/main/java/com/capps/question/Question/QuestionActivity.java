@@ -15,10 +15,11 @@ import com.capps.question.R;
  * Created by varun on 27/3/17.
  */
 
-public class QuestionActivity extends Activity implements AdminOptionsFrag.AdminOPtionInterface,Index.IndexInterface {
+public class QuestionActivity extends Activity implements AdminOptionsFrag.AdminOPtionInterface,Index.IndexInterface,ShowFrag.ShowInterface {
 
     public static Context appContext;
     private FragmentManager mManager;
+
 
 
     public static final String IS_ADMIN_KEY = "isAdmin";
@@ -42,10 +43,14 @@ public class QuestionActivity extends Activity implements AdminOptionsFrag.Admin
         }//another wise ,Employee login
         else
         {
-            FragmentTransaction transaction=mManager.beginTransaction();
-            transaction.add(R.id.questionActivity,new EmployeeContentFrag());
-            transaction.commit();
+            includeFragment(new ShowFrag());
         }
+    }
+
+    private void includeFragment(Fragment frag) {
+        FragmentTransaction transaction=mManager.beginTransaction();
+        transaction.add(R.id.questionActivity,frag);
+        transaction.commit();
     }
 
 
@@ -85,6 +90,17 @@ public class QuestionActivity extends Activity implements AdminOptionsFrag.Admin
 //        transaction.addToBackStack(null);//TODO:: JUST IN porttray state
 //        transaction.commit();
 
+    }
+
+    @Override
+    public void moveToNextQuestionFrag(Question question) {
+        /*Steps
+        * show Question if question not null
+        * show Result SCreen if question is null*/
+
+        if (question != null){
+
+        }
     }
 }
 

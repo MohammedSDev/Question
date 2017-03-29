@@ -2,6 +2,7 @@ package com.capps.question.Question;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.support.annotation.Nullable;
 
 import com.capps.question.Answer;
 import com.capps.question.AppDataBase;
@@ -55,7 +56,6 @@ public class Question {
 
         return rowID;
     }
-
     //save Question & Answers
     boolean save(Answer []answers){
         long rowID = save();
@@ -66,7 +66,6 @@ public class Question {
         }
         return resuly;
     }
-
     //Get all questions in DB
     public static Question []allQuestion(Context context){
         Cursor values;
@@ -88,6 +87,53 @@ public class Question {
 
         return questions;
 
+    }
+    //Get first Question in DB OR null
+    @Nullable
+    public static Question firstQuestion(Context context) {
+
+        /*Steps
+        get FIRST question from DB
+        create&return next new Question OR null*/
+
+        AppDataBase db = AppDataBase.getInstance(context);
+        String sql = "SELECT * FROM " + AppDataBase.QUESTION_T + " ORDER BY " + AppDataBase.ID_COLUMN + " LIMIT 1;";
+        Cursor value = db.getRow(sql);
+
+        if (value.moveToFirst()) {
+            Question nextQuestion = new Question(context);
+            nextQuestion.setmQuestion(value.getString(value.getColumnIndex(AppDataBase.QUESTION_COLUMN_QUESTION)));
+            nextQuestion.setmId(value.getInt(value.getColumnIndex(AppDataBase.ID_COLUMN)));
+            return nextQuestion;
+        }
+        else
+            return null;
+
+    }
+    //Get next Question..Or null if it is last one, also return null if no id exists for this question
+    public Question nextQuestion() {
+
+        /*Steps
+        check if this question has id
+        get next question from DB
+        create&return next new Question OR null*/
+
+        if (this.getmId() != 0) {
+
+            AppDataBase db = AppDataBase.getInstance(mContext);
+            String nextID = (this.getmId() + 1) + "";
+            String sql = "SELECT * FROM " + AppDataBase.QUESTION_T + " WHERE " + AppDataBase.ID_COLUMN + " = ?";
+            Cursor value = db.getRow(sql, nextID + "");
+
+            if (value.moveToFirst()) {
+                Question nextQuestion = new Question(mContext);
+                nextQuestion.setmQuestion(value.getString(value.getColumnIndex(AppDataBase.QUESTION_COLUMN_QUESTION)));
+                nextQuestion.setmId(value.getInt(value.getColumnIndex(AppDataBase.ID_COLUMN)));
+                return nextQuestion;
+            } else
+                return null;
+        } else
+            return null;
     }
 
 

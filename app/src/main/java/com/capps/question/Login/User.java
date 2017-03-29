@@ -73,7 +73,7 @@ public class User {
 
     @Nullable
     public static User isExists(Context context,@NonNull String email){
-        String sql = "SELECT " + AppDataBase.ID_COLUMN +
+        String sql = "SELECT * " +
                 " FROM " + AppDataBase.USER_T +
                 " WHERE " + AppDataBase.USER_COLUMN_EMAIL +" = ?";
         AppDataBase db=AppDataBase.getInstance(context);

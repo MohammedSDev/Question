@@ -94,10 +94,6 @@ public class QuestionAdapter extends BaseAdapter implements CompoundButton.OnChe
             holder.checkBox.setChecked(mAnswers[position].isCurrect());
         }
 
-
-
-
-
         //this to pervient user from change answers..(showQuestion Screen & DetailQuestion Screen)
         if (notAllowUserToInbut){
             holder.editText.setEnabled(false);
