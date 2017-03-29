@@ -27,11 +27,11 @@ public class AppDataBase extends SQLiteOpenHelper {
     private static int DB_VERSION = 3;
     private static AppDataBase INSTANCE=null;
 
-    private final String USER_T = "users";
-    private final String USER_COLUMN_NAME = "name";
-    private final String USER_COLUMN_EMAIL = "email";
+    public static final String USER_T = "users";
+    public static final String USER_COLUMN_NAME = "name";
+    public static final String USER_COLUMN_EMAIL = "email";
     private final String USER_COLUMN_ADMIN = "admin";
-    private final String USER_COLUMN_PASS = "pass ";//TODO::PASS >> pass ...changed..?
+    private final String USER_COLUMN_PASS = "pass ";
 
     public static final String QUESTION_T = "questions";
     public static final String QUESTION_COLUMN_QUESTION= "question";
@@ -56,13 +56,13 @@ public class AppDataBase extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createUserT = "CREATE TABLE " + USER_T +" (id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                                                        USER_COLUMN_NAME + " VARCHAR(51)," +
-                                                        USER_COLUMN_EMAIL + " VARCHAR(51)," +
+                                                        USER_COLUMN_NAME + " VARCHAR(51) NOT NULL," +
+                                                        USER_COLUMN_EMAIL + " VARCHAR(51) UNIQUE NOT NULL," +
                                                         USER_COLUMN_PASS + "  VARCHAR(21)," +
                                                         USER_COLUMN_ADMIN + " boolean DEFAULT (0)" +
                                                         ");";
-        String insertAdmin = "INSERT INTO " + USER_T + " (" + USER_COLUMN_NAME + "," + USER_COLUMN_PASS + "," + USER_COLUMN_ADMIN + ")" +
-                "VALUES ('ADMIN','12345',1)";
+        String insertAdmin = "INSERT INTO " + USER_T + " (" + USER_COLUMN_EMAIL + "," + USER_COLUMN_NAME + "," + USER_COLUMN_PASS + "," + USER_COLUMN_ADMIN + ")" +
+                "VALUES ('Admin@email.com','ADMIN','12345',1)";
 
         String createQuestionT = "CREATE TABLE " + QUESTION_T + " (id INTEGER PRIMARY KEY AUTOINCREMENT," +
                                                    QUESTION_COLUMN_QUESTION + " VARCHAR(51) );";
@@ -98,7 +98,7 @@ public class AppDataBase extends SQLiteOpenHelper {
         return cursor;
     }
 
-    private Cursor getRow(String sql,String selection){
+    public Cursor getRow(String sql,String selection){
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(sql,new String[] {selection});
         return cursor;
@@ -134,7 +134,7 @@ public class AppDataBase extends SQLiteOpenHelper {
     //Users Method
 
     //create
-    public boolean createUser(User user){
+    public long createUser(User user){
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -149,28 +149,11 @@ public class AppDataBase extends SQLiteOpenHelper {
             db.setTransactionSuccessful();
             db.endTransaction();
 
-            if (result >= 0)
-                return true;
-            else
-                return false;
+            return result;
         }catch (IllegalFormatException err){
             Log.d("ERROR","error in create user in db");
-            return false;
+            return -1;
         }
-
-    }
-
-    //is new user
-    public boolean isNewUser(User user){
-        String command = "SELECT id FROM " + USER_T + "WHERE name = ?";
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor;
-        cursor = db.rawQuery(command,new String[] {user.getName()});
-        if (cursor != null && cursor.moveToFirst())
-            return false; //mean it is exitis in db.
-        else
-            return true; // mean not exisit in db
 
     }
 
@@ -184,6 +167,8 @@ public class AppDataBase extends SQLiteOpenHelper {
         else
             return false;
     }
+
+
 
 
     //Question Methods

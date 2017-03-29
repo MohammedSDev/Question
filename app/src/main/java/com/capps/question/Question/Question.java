@@ -13,15 +13,6 @@ import com.capps.question.AppDataBase;
 public class Question {
 
     private Context mContext;
-
-    public int getmId() {
-        return mId;
-    }
-
-    public void setmId(int mId) {
-        this.mId = mId;
-    }
-
     private String mQuestion;
     private int mId;
 
@@ -32,9 +23,13 @@ public class Question {
     }
 
 
+    public int getmId() {
+        return mId;
+    }
 
-
-
+    public void setmId(int mId) {
+        this.mId = mId;
+    }
 
     public String getmQuestion() {
         return mQuestion;
@@ -50,6 +45,9 @@ public class Question {
     }
 
 
+
+    //DB Method
+
     //save Question only
     long save(){
         AppDataBase db = AppDataBase.getInstance(mContext);
@@ -57,7 +55,6 @@ public class Question {
 
         return rowID;
     }
-
 
     //save Question & Answers
     boolean save(Answer []answers){
@@ -70,7 +67,7 @@ public class Question {
         return resuly;
     }
 
-
+    //Get all questions in DB
     public static Question []allQuestion(Context context){
         Cursor values;
         Question [] questions;

@@ -17,6 +17,9 @@
     <string name="saveQuestionAndAnswersSuccessful">Save Successful</string>
     <string name="saveQuestionAndAnswersFailed">Save Failed</string>
     <string name="noQuestion">No Question</string>
+    <string name="emailEmpty">You have To Enter Your Email</string>
+    <string name="emailName">You have To Enter Your Name</string>
+    <string name="welcome">Welcome</string>
 
 
     <string-array name="numberOptionAnswer">
@@ -26,3 +29,4 @@
         <item>4</item>
     </string-array>
 </resources>
+

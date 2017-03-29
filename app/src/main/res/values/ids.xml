@@ -20,4 +20,5 @@
     <item name="edutTextQuestion" type="id">editTExtQuestion</item>
     <item name="contentAnswer" type="id">contentAnswer</item>
     <item name="textViewQuestion" type="id">extViewQuestion</item>
+
 </resources>

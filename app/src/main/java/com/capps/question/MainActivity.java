@@ -98,22 +98,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
         //Employee Logged
-        else{
+        else {
 
-            if (mEmail == null){
+            if (mEmail == null) {
                 mEmail = (EditText) findViewById(R.id.editTextEmail);
                 mName = (EditText) findViewById(R.id.editTextName);
             }
+            /*Steps
+            * check Email Not Empty
+            * check user is Exists
+            * check name if he/she is new one
+            * create user if he/she is new one
+            * show message state to user(Success Log/Welcome User)
+            * next ..Activity/Fragment*/
 
-            User user = new User(mEmail.getText().toString(),mName.getText().toString());
-            if(db.createUser(user)){
-
-                Intent questionIntent=new Intent(this, QuestionActivity.class);
-                questionIntent.putExtra(QuestionActivity.IS_ADMIN_KEY,false);
-
-                startActivity(questionIntent);
+            if (mEmail.getText().toString().isEmpty() || mEmail.getText().toString().equals(" ")) {
+                Toast.makeText(this, R.string.emailEmpty, Toast.LENGTH_LONG).show();
+                return;
             }
 
+            User user = User.isExists(this, mEmail.getText().toString());
+            if (user != null) {
+                welcomeEmployee(user);
+                return;
+            } else {
+                if (mName.getText().toString().isEmpty() || mName.getText().toString().equals(" ")) {
+                    Toast.makeText(this, R.string.emailName, Toast.LENGTH_LONG).show();
+                    return;
+                }
+                user = new User(mEmail.getText().toString(), mName.getText().toString());
+                long idRow = User.createUser(this, user);
+                if (idRow > -1) {
+                    welcomeEmployee(user);
+                    return;
+                }
+
+            }
 
         }
 
@@ -130,5 +150,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+
+
+
+    private void welcomeEmployee(User user){
+        String welcome = getString(R.string.welcome);
+        welcome += " " + user.getName();
+        Toast.makeText(this,welcome,Toast.LENGTH_SHORT).show();
+
+        Intent questionIntent=new Intent(this, QuestionActivity.class);
+        questionIntent.putExtra(QuestionActivity.IS_ADMIN_KEY,false);
+        startActivity(questionIntent);
+    }
 
 }
