@@ -28,6 +28,7 @@ public class QuestionAdapter extends BaseAdapter implements CompoundButton.OnChe
     private int mCount;
     private Context mContext;
     private Answer [] mAnswers;
+    private boolean notAllowUserToInbut=false;
 
 
     //Use this Constrictor when you dont have any pervaio answers(ex: new Question with new Answers)
@@ -35,6 +36,15 @@ public class QuestionAdapter extends BaseAdapter implements CompoundButton.OnChe
         this.mCount = mCount;
         this.mContext = mContext;
         mAnswers = new Answer[mCount];
+
+    }
+
+    //Use this Constrictor when you  have any pervaio answers(ex: Detail the Question OR Edit it)
+    public QuestionAdapter(int mCount,Answer []answers, Context mContext) {
+        this.mCount = answers.length;
+        this.mContext = mContext;
+        this.mAnswers = answers;
+        notAllowUserToInbut = true;//TO break user change the answer,just show the answer(ex::details QuestionScreen & Show Question Secreen)
 
     }
 
@@ -74,6 +84,28 @@ public class QuestionAdapter extends BaseAdapter implements CompoundButton.OnChe
             holder.checkBox = (CheckBox) convertView.findViewById(R.id.rowListCheckBoxtQuestion);
 
 
+            convertView.setTag(holder);
+        }else
+        {
+            holder = (Holder) convertView.getTag();
+        }
+        if (mAnswers[position]!= null){
+            holder.editText.setText(mAnswers[position].getAnswer());
+            holder.checkBox.setChecked(mAnswers[position].isCurrect());
+        }
+
+
+
+
+
+        //this to pervient user from change answers..(showQuestion Screen & DetailQuestion Screen)
+        if (notAllowUserToInbut){
+            holder.editText.setEnabled(false);
+            holder.checkBox.setEnabled(false);
+        }
+        // Another way..user is Allow To change Answers..(CreateQuestion Screen & EditQuestion Screen)
+        else
+        {
             holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -94,15 +126,6 @@ public class QuestionAdapter extends BaseAdapter implements CompoundButton.OnChe
                     }
                 }
             });
-
-            convertView.setTag(holder);
-        }else
-        {
-            holder = (Holder) convertView.getTag();
-        }
-        if (mAnswers[position]!= null){
-            holder.editText.setText(mAnswers[position].getAnswer());
-            holder.checkBox.setChecked(mAnswers[position].isCurrect());
         }
 
 

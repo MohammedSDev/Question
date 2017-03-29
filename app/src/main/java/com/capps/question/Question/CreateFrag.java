@@ -69,15 +69,6 @@ public class CreateFrag extends Fragment implements AdapterView.OnItemSelectedLi
         transaction.replace(R.id.content,frag);
         transaction.commit();
     }
-//    private void changeFragment(int editTextCount) {
-//        mListAnswerFrag = new ListAnswerFrag();
-//        Bundle bundle=new Bundle();
-//        bundle.putInt(ListAnswerFrag.EDITTEXT_COUNT_KEY,editTextCount);
-//        mListAnswerFrag.setArguments(bundle);
-//        FragmentTransaction transaction = mManager.beginTransaction();
-//        transaction.replace(R.id.content,mListAnswerFrag);
-//        transaction.commit();
-//    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -123,7 +114,7 @@ public class CreateFrag extends Fragment implements AdapterView.OnItemSelectedLi
             return;
         }
         for (Answer a:answers) {
-            if (a.getAnswer().isEmpty() || a.getAnswer().equalsIgnoreCase(" ")){ //TODO:: equals > equals
+            if (a == null || (a.getAnswer().isEmpty() || a.getAnswer().equalsIgnoreCase(" ")) ){ //TODO:: equals > equals
                 Toast.makeText(getActivity(),R.string.emptyAnswer,Toast.LENGTH_SHORT).show();
                 return;
             }

@@ -15,7 +15,7 @@ import com.capps.question.R;
  * Created by varun on 27/3/17.
  */
 
-public class QuestionActivity extends Activity implements AdminOptionsFrag.AdminOPtionInterface {
+public class QuestionActivity extends Activity implements AdminOptionsFrag.AdminOPtionInterface,Index.IndexInterface {
 
     public static Context appContext;
     private FragmentManager mManager;
@@ -59,8 +59,32 @@ public class QuestionActivity extends Activity implements AdminOptionsFrag.Admin
     @Override
     public void changeFragment(Fragment newFragment) {
         FragmentTransaction transaction = mManager.beginTransaction();
-        transaction.replace(R.id.questionActivity,newFragment); //TODO::todo:: add to back stack
+        transaction.replace(R.id.questionActivity,newFragment); //TODO::todo:: add to back stack ..check it work?
+        transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+
+
+
+    @Override
+    public void sendDetailsData(String question, int question_id) {
+
+        //TODO::check if phone in landscape or portray state.
+
+        //portray state
+        DetailsFrag detailFrag = new DetailsFrag();
+        Bundle bundle = new Bundle();
+        bundle.putString(DetailsFrag.QUESTION_KEY,question);
+        bundle.putInt(DetailsFrag.QUESTION_ID_KEY,question_id);
+
+        detailFrag.setArguments(bundle);
+        changeFragment(detailFrag);
+//        FragmentTransaction transaction = mManager.beginTransaction();
+//        transaction.replace(R.id.content,detailFrag);
+//        transaction.addToBackStack(null);//TODO:: JUST IN porttray state
+//        transaction.commit();
+
     }
 }
 

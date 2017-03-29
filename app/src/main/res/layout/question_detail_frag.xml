@@ -5,7 +5,21 @@
 
     <TextView
         android:text="TextView"
+        android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@id/textViewQuestion" />\
+
+    <FrameLayout
+        android:layout_marginTop="@dimen/marginTopVeryShort"
+        android:id="@id/contentAnswer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="9"/>
+
+    <!--people list details-->
+    <!--<FrameLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"/>-->
 </LinearLayout>

@@ -18,4 +18,6 @@
     <item name="buttonListAllQues" type="id">buttonListAllQues</item>
     <item name="buttonUsers" type="id">buttonUsers</item>
     <item name="edutTextQuestion" type="id">editTExtQuestion</item>
+    <item name="contentAnswer" type="id">contentAnswer</item>
+    <item name="textViewQuestion" type="id">extViewQuestion</item>
 </resources>

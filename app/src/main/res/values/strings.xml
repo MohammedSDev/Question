@@ -16,6 +16,7 @@
     <string name="emptyAnswer">Should Write Answer.2 answer at less</string>
     <string name="saveQuestionAndAnswersSuccessful">Save Successful</string>
     <string name="saveQuestionAndAnswersFailed">Save Failed</string>
+    <string name="noQuestion">No Question</string>
 
 
     <string-array name="numberOptionAnswer">

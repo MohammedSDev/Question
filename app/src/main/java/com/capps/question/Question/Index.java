@@ -38,6 +38,11 @@ public class Index extends ListFragment {
         Question []questions = Question.allQuestion(getActivity());
         IndexAdapter adapter=new IndexAdapter(questions,getActivity());
 
+
         setListAdapter(adapter);
+    }
+
+    interface IndexInterface{
+        void sendDetailsData(String question,int question_id);
     }
 }

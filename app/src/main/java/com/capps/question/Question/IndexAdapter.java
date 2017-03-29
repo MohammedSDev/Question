@@ -1,6 +1,8 @@
 package com.capps.question.Question;
 
+import android.app.FragmentManager;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ public class IndexAdapter extends BaseAdapter {
 
     private Question []mQuestion;
     private Context mContext;
+
 
     public IndexAdapter(Question []mQuestion, Context mContext) {
         this.mQuestion = mQuestion;
@@ -37,9 +40,9 @@ public class IndexAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
-        Holder holder;
+        final Holder holder;
         if (convertView == null){
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(android.R.layout.simple_list_item_1,parent,false);
@@ -58,7 +61,12 @@ public class IndexAdapter extends BaseAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO::show Details
+                if (mContext instanceof QuestionActivity){
+                    Index.IndexInterface host = (Index.IndexInterface) mContext;
+                    host.sendDetailsData(mQuestion[position].getmQuestion(),mQuestion[position].getmId());
+                }else {
+                    Log.d("error","Not the Expected Activity..It is " + mContext.toString());
+                }
             }
         });
 

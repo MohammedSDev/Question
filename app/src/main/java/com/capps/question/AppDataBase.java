@@ -24,7 +24,7 @@ public class AppDataBase extends SQLiteOpenHelper {
     public static final String ID_COLUMN="id";
 
     private final static String DB_NAME = "QUESTION_DB";
-    private static int DB_VERSION = 2;
+    private static int DB_VERSION = 3;
     private static AppDataBase INSTANCE=null;
 
     private final String USER_T = "users";
@@ -36,10 +36,10 @@ public class AppDataBase extends SQLiteOpenHelper {
     public static final String QUESTION_T = "questions";
     public static final String QUESTION_COLUMN_QUESTION= "question";
 
-    private final String ANSWER_T = "answers";
-    private final String ANSWER_COLUMN_ANSWER= "answer";
-    private final String ANSWER_COLUMN_QUESTION_ID= "question_id";
-    private final String ANSWER_COLUMN_CURRECT= "currect";
+    public static final String ANSWER_T = "answers";
+    public static final String ANSWER_COLUMN_ANSWER= "answer";
+    public static final String ANSWER_COLUMN_QUESTION_ID= "question_id";
+    public static final String ANSWER_COLUMN_CURRECT= "currect";
 
     private AppDataBase(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -55,7 +55,7 @@ public class AppDataBase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createUserT = "CREATE TABLE " + USER_T +" (id int PRIMARY KEY," +
+        String createUserT = "CREATE TABLE " + USER_T +" (id INTEGER PRIMARY KEY AUTOINCREMENT," +
                                                         USER_COLUMN_NAME + " VARCHAR(51)," +
                                                         USER_COLUMN_EMAIL + " VARCHAR(51)," +
                                                         USER_COLUMN_PASS + "  VARCHAR(21)," +
@@ -64,10 +64,10 @@ public class AppDataBase extends SQLiteOpenHelper {
         String insertAdmin = "INSERT INTO " + USER_T + " (" + USER_COLUMN_NAME + "," + USER_COLUMN_PASS + "," + USER_COLUMN_ADMIN + ")" +
                 "VALUES ('ADMIN','12345',1)";
 
-        String createQuestionT = "CREATE TABLE " + QUESTION_T + " (id int PRIMARY KEY," +
+        String createQuestionT = "CREATE TABLE " + QUESTION_T + " (id INTEGER PRIMARY KEY AUTOINCREMENT," +
                                                    QUESTION_COLUMN_QUESTION + " VARCHAR(51) );";
 
-        String createAnswerT= "CREATE TABLE " + ANSWER_T + " (id int PRIMARY KEY," +
+        String createAnswerT= "CREATE TABLE " + ANSWER_T + " (id INTEGER PRIMARY KEY AUTOINCREMENT," +
                                                 ANSWER_COLUMN_ANSWER+ " VARCHAR(51)," +
                                                 ANSWER_COLUMN_QUESTION_ID+ " INTEGER," +
                                                 ANSWER_COLUMN_CURRECT+ " BOOLEAN DEFAULT(0)," +
@@ -120,6 +120,13 @@ public class AppDataBase extends SQLiteOpenHelper {
         String sql = "SELECT * FROM " + tableName;
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(sql,null);
+        return cursor;
+    }
+
+    public Cursor getAllTable(String tableName,String whereClassColumnName,String whereClassIdValue){
+        String sql = "SELECT * FROM " + tableName + " WHERE " + whereClassColumnName + " = ?";
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql,new String[]{whereClassIdValue + ""});
         return cursor;
     }
 
