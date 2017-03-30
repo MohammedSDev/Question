@@ -33,23 +33,22 @@ public class QuestionActivity extends Activity implements AdminOptionsFrag.Admin
 
         mManager = getFragmentManager();
 
-        //check if admin or Employee is logged
-        //get data from save
-        //admin login savedInstanceState(in case phone over change) or from intent(in case create first/new this activity)
+        //check is admin or Employee is logged
+        //get data from savedInstanceState or intent
+        //from savedInstanceState(in case phone over change) or from intent(in case create first/new this activity)
         if( (savedInstanceState!= null && savedInstanceState.getBoolean(IS_ADMIN_KEY)) || getIntent().getBooleanExtra(IS_ADMIN_KEY,false)){
-            FragmentTransaction transaction=mManager.beginTransaction();
-            transaction.add(R.id.questionActivity,new AdminOptionsFrag());
-            transaction.commit();
+          includeFragment(new AdminOptionsFrag());
         }//another wise ,Employee login
         else
         {
+
             includeFragment(new ShowFrag());
         }
     }
 
     private void includeFragment(Fragment frag) {
         FragmentTransaction transaction=mManager.beginTransaction();
-        transaction.add(R.id.questionActivity,frag);
+        transaction.replace(R.id.questionActivity,frag);
         transaction.commit();
     }
 
@@ -95,10 +94,16 @@ public class QuestionActivity extends Activity implements AdminOptionsFrag.Admin
     @Override
     public void moveToNextQuestionFrag(Question question) {
         /*Steps
-        * show Question if question not null
-        * show Result SCreen if question is null*/
+        * show Question if the question not null
+        * show Result Screen if question is null*/
 
         if (question != null){
+            ShowFrag frag = new ShowFrag();
+            Bundle bundle=new Bundle();
+            bundle.putString(ShowFrag.QUESTION_KEY,question.getmQuestion());
+            bundle.putInt(ShowFrag.QUESTION_ID_KEY,question.getmId());
+            frag.setArguments(bundle);
+            includeFragment(frag);
 
         }
     }

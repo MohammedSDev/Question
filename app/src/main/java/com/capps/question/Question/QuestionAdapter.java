@@ -1,9 +1,6 @@
 package com.capps.question.Question;
 
 import android.content.Context;
-import android.text.Editable;
-import android.text.SpannableStringBuilder;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.capps.question.Answer;
-import com.capps.question.MainActivity;
 import com.capps.question.R;
-
-import java.io.Serializable;
 
 /**
  * Created by varun on 24/3/17.
@@ -28,7 +22,8 @@ public class QuestionAdapter extends BaseAdapter implements CompoundButton.OnChe
     private int mCount;
     private Context mContext;
     private Answer [] mAnswers;
-    private boolean notAllowUserToInbut=false;
+    private boolean mNotAllowUserToInbut =false;
+    private boolean mShowAnswer = true;
 
 
     //Use this Constrictor when you dont have any pervaio answers(ex: new Question with new Answers)
@@ -39,13 +34,16 @@ public class QuestionAdapter extends BaseAdapter implements CompoundButton.OnChe
 
     }
 
-    //Use this Constrictor when you  have any pervaio answers(ex: Detail the Question OR Edit it)
-    public QuestionAdapter(int mCount,Answer []answers, Context mContext) {
+    //Use this Constrictor when you  have any pervaio answers(ex: Detail the Question OR Edit it Or Show Question)
+    public QuestionAdapter(int mCount,Answer []answers, Context mContext,boolean notAllowUserToInbut,boolean showAnswer) {
         this.mCount = answers.length;
         this.mContext = mContext;
         this.mAnswers = answers;
-        notAllowUserToInbut = true;//TO break user change the answer,just show the answer(ex::details QuestionScreen & Show Question Secreen)
-
+        mNotAllowUserToInbut = notAllowUserToInbut;//TO break user change the answer,just show the answer(ex::details QuestionScreen & Show Question Secreen)
+        mShowAnswer = showAnswer; //this to display/hide answer(ex: show Question);
+        if (!showAnswer){
+            forea
+        }
     }
 
 
@@ -69,7 +67,7 @@ public class QuestionAdapter extends BaseAdapter implements CompoundButton.OnChe
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.d("posision",position+"");
+        Log.d("position",position+"");
         final int local_position = position;
 
         Holder holder;
@@ -91,11 +89,15 @@ public class QuestionAdapter extends BaseAdapter implements CompoundButton.OnChe
         }
         if (mAnswers[position]!= null){
             holder.editText.setText(mAnswers[position].getAnswer());
-            holder.checkBox.setChecked(mAnswers[position].isCurrect());
+            if (mShowAnswer)
+                holder.checkBox.setChecked(mAnswers[position].isCurrect());
         }
 
-        //this to pervient user from change answers..(showQuestion Screen & DetailQuestion Screen)
-        if (notAllowUserToInbut){
+        //this to pervient user from change answers..(showQuestion Screen:textBox:false & DetailQuestion Screen textBox_CheckBox:false)
+        if (!mShowAnswer)
+            holder.editText.setEnabled(false);
+
+        if (mNotAllowUserToInbut){
             holder.editText.setEnabled(false);
             holder.checkBox.setEnabled(false);
         }

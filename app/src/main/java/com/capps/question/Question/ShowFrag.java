@@ -28,6 +28,7 @@ public class ShowFrag extends Fragment implements View.OnClickListener {
     final static String QUESTION_ID_KEY="Qid";
     private ListAnswerFrag mListAnswerFrag;
     private Answer []mAnswers;
+    short question_id;
 
 
     @Override
@@ -59,13 +60,15 @@ public class ShowFrag extends Fragment implements View.OnClickListener {
         TextView question = (TextView) view.findViewById(R.id.textViewQuestion);
         Button buttonNextQuestion = (Button) view.findViewById(R.id.buttonNextQuestion);
         buttonNextQuestion.setVisibility(View.VISIBLE);//Because this is Invisible in it is layout.and only used here.
+        buttonNextQuestion.setOnClickListener(this);
 
         if (bundle != null){
 
             //put Question
             question.setText(bundle.getString(QUESTION_KEY));
             //put answers
-            mAnswers = Answer.getAllAnswers(getActivity(),bundle.getInt(QUESTION_ID_KEY));
+            question_id = (short) bundle.getInt(QUESTION_ID_KEY);
+            mAnswers = Answer.getAllAnswers(getActivity(),question_id);
             mListAnswerFrag =new ListAnswerFrag();
 
             //put users//TODO::
@@ -73,6 +76,7 @@ public class ShowFrag extends Fragment implements View.OnClickListener {
         else
         {
             Question firstQuestion =Question.firstQuestion(getActivity());
+            question_id = (short) firstQuestion.getmId();
             //put Question
             question.setText(firstQuestion.getmQuestion());
             //put answers
@@ -111,6 +115,7 @@ public class ShowFrag extends Fragment implements View.OnClickListener {
         Bundle bundle=new Bundle();
         bundle.putInt(ListAnswerFrag.EDITTEXT_COUNT_KEY,editTextCount);
         bundle.putSerializable(ListAnswerFrag.ANSWER_DATA_KEY,answers);//TODO:: Should throw Exception..because it's not implement Serializable
+        bundle.putBoolean(ListAnswerFrag.DONT_SHOW_CORRECT_ANSWER_KEY,false);
         frag.setArguments(bundle);
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.contentAnswer,frag);
@@ -127,7 +132,7 @@ public class ShowFrag extends Fragment implements View.OnClickListener {
 
 
         Answer []userAnswers = mListAnswerFrag.mQuestionAdapter.getData();
-        if (!isUserChoiseAnyAnswer(userAnswers)){
+        if (!isUserChooseAnyAnswer(userAnswers)){
             Toast.makeText(getActivity(),R.string.choiceAtLessOneAnswer,Toast.LENGTH_SHORT).show();
             return;
         }
@@ -141,8 +146,8 @@ public class ShowFrag extends Fragment implements View.OnClickListener {
 
 
     }
-
-    private boolean isUserChoiseAnyAnswer(Answer []answers ){
+    //no description more then it's name..
+    private boolean isUserChooseAnyAnswer(Answer []answers ){
 
         for (Answer a : answers) {
             if(a.isCurrect())
@@ -150,7 +155,7 @@ public class ShowFrag extends Fragment implements View.OnClickListener {
         }
         return false;
     }
-
+    //check answer and return the point (0 or 1)
     private short getPoint(Answer []answer){
         boolean result=true;
 
@@ -166,11 +171,11 @@ public class ShowFrag extends Fragment implements View.OnClickListener {
         else
             return 0;
     }
-
+//    request host to change this fragment object to new one with next question
     private void nextQuesion(){
 
         Question question = new Question(getActivity());
-        question.setmId(getArguments().getInt(QUESTION_ID_KEY));
+        question.setmId(question_id);
         question = question.nextQuestion();
         ShowInterface host = (ShowInterface) getActivity();
         host.moveToNextQuestionFrag(question);
