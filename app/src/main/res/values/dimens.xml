@@ -8,4 +8,6 @@
     <dimen name="loginContentEmployeeEditTextNameMarginTop">2dp</dimen>
     <dimen name="adminOPtionButtonMargin">3dp</dimen>
     <dimen name="marginTopVeryShort">2dp</dimen>
+    <dimen name="smallpadding">2dp</dimen>
+    <dimen name="resultSize">75dp</dimen>
 </resources>

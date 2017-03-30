@@ -7,7 +7,7 @@ import android.database.Cursor;
  * Created by varun on 27/3/17.
  */
 
-public class Answer {
+public class Answer implements Cloneable {
 
     private String answer;
     private boolean isCurrect=false;
@@ -52,5 +52,11 @@ public class Answer {
             counter++;
         } while (valuse.moveToNext());
         return answers;
+    }
+
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

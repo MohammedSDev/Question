@@ -130,6 +130,15 @@ public class AppDataBase extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public short countRows(String tableName){
+        String sql = "SELECT COUNT(*) FROM " + tableName;
+        Cursor value = this.getReadableDatabase().rawQuery(sql,null,null);
+        if (value.moveToFirst())
+            return (short) value.getInt(0);
+        else
+            return 0;
+    }
+
 
     //Users Method
 

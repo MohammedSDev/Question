@@ -31,6 +31,7 @@ public class QuestionActivity extends Activity implements AdminOptionsFrag.Admin
         setContentView(R.layout.activity_question);
         QuestionActivity.appContext = this;
 
+
         mManager = getFragmentManager();
 
         //check is admin or Employee is logged
@@ -41,7 +42,7 @@ public class QuestionActivity extends Activity implements AdminOptionsFrag.Admin
         }//another wise ,Employee login
         else
         {
-
+            ShowFrag.POINTS = 0;
             includeFragment(new ShowFrag());
         }
     }
@@ -97,17 +98,24 @@ public class QuestionActivity extends Activity implements AdminOptionsFrag.Admin
         * show Question if the question not null
         * show Result Screen if question is null*/
 
+        Bundle bundle=new Bundle();
         if (question != null){
             ShowFrag frag = new ShowFrag();
-            Bundle bundle=new Bundle();
             bundle.putString(ShowFrag.QUESTION_KEY,question.getmQuestion());
             bundle.putInt(ShowFrag.QUESTION_ID_KEY,question.getmId());
             frag.setArguments(bundle);
             includeFragment(frag);
-
+        }
+        else{
+            ResultFrag frag=new ResultFrag();
+            bundle.putInt(ResultFrag.RESULT_KEY,ShowFrag.POINTS);
+            bundle.putInt(ResultFrag.FULL_MARK_KEY,Question.countALl(this));
+            frag.setArguments(bundle);
+            includeFragment(frag);
         }
     }
 }
 
 
 //TODO::Clear password after clickButton
+

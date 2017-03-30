@@ -22,7 +22,9 @@
     <string name="welcome">Welcome</string>
     <string name="next">Next</string>
     <string name="choiceAtLessOneAnswer">Choice At less one answer</string>
-
+    <string name="result">Result</string>
+    <string name="success">Success</string>
+    <string name="failed">Failed</string>
 
 
     <string-array name="numberOptionAnswer">

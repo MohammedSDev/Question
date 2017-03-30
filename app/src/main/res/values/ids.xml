@@ -21,5 +21,7 @@
     <item name="contentAnswer" type="id">contentAnswer</item>
     <item name="textViewQuestion" type="id">extViewQuestion</item>
     <item name="buttonNextQuestion" type="id">buttonNextQuestion</item>
+    <item name="textViewResultSuccessFailed" type="id">textViewResultSuccessFailed</item>
+    <item name="textViewResult" type="id">textViewResult</item>
 
 </resources>

@@ -18,7 +18,7 @@ public class ListAnswerFrag extends ListFragment {
 
     static final String EDITTEXT_COUNT_KEY="ETCount";
     static final String ANSWER_DATA_KEY="ANSWER_DATA";
-    static final String DONT_SHOW_CORRECT_ANSWER_KEY="SHOW_ANSWERS";//Don't show correct answers
+    //static final String DONT_SHOW_CORRECT_ANSWER_KEY="SHOW_ANSWERS";//Don't show correct answers
     QuestionAdapter mQuestionAdapter;
 
 
@@ -38,13 +38,12 @@ public class ListAnswerFrag extends ListFragment {
 
         int count = getArguments().getInt(EDITTEXT_COUNT_KEY);
         Answer []answers = (Answer[]) getArguments().getSerializable(ANSWER_DATA_KEY); //TODO:: Should Throw Exception..Beacuse it's not..Serializable
-        boolean showCorrectAnswer = getArguments().getBoolean(DONT_SHOW_CORRECT_ANSWER_KEY,true);//if it found value of this key..that mean it is SHowScreen..so Dont show correct answers
         if (answers != null)
         {
             /*showScreen
             * detailsScreen
             * editScreen..not created yet...and also it has different values in show corect and not allow input..be careful */
-            mQuestionAdapter=new QuestionAdapter(count,answers,getActivity(),showCorrectAnswer,showCorrectAnswer);
+            mQuestionAdapter=new QuestionAdapter(count,answers,getActivity());
         }
         else
         {

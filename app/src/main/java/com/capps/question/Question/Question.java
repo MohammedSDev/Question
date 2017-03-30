@@ -136,6 +136,11 @@ public class Question {
             return null;
     }
 
+    public static short countALl(Context context){
+        AppDataBase db=AppDataBase.getInstance(context);
+        return db.countRows(AppDataBase.QUESTION_T);
+    }
+
 
 
 }
