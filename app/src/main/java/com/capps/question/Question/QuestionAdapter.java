@@ -1,6 +1,8 @@
 package com.capps.question.Question;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +26,7 @@ public class QuestionAdapter extends BaseAdapter implements CompoundButton.OnChe
     private Answer [] mAnswers;
     private boolean mNotAllowUserToInbut =false;
     private boolean mIsShowScreen = false;
+    private boolean is_change_text_programmatically =false;//Beacuse textBox has listener text change,and we don't want to listen to programmatically changing.
 
 
     //Use this Constrictor when you dont have any pervaio answers(ex: new Question with new Answers)
@@ -93,7 +96,9 @@ public class QuestionAdapter extends BaseAdapter implements CompoundButton.OnChe
         }
 
         if (mAnswers[position] != null) {
+            is_change_text_programmatically =true;
             holder.editText.setText(mAnswers[position].getAnswer());
+            is_change_text_programmatically =false;
             holder.checkBox.setChecked(mAnswers[position].isCurrect());
         }
 
@@ -117,17 +122,40 @@ public class QuestionAdapter extends BaseAdapter implements CompoundButton.OnChe
             });
 
         if (holder.editText.isEnabled())
-            holder.editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            holder.editText.addTextChangedListener(new TextWatcher() {
                 @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    if (!hasFocus) {
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (!is_change_text_programmatically){
                         if (mAnswers[local_position] == null) {
                             mAnswers[local_position] = new Answer();
                         }
-                        mAnswers[local_position].setAnswer(((EditText) v).getText().toString());
+                        mAnswers[local_position].setAnswer(s.toString());
                     }
                 }
             });
+
+
+//            holder.editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//                @Override
+//                public void onFocusChange(View v, boolean hasFocus) {
+//                    if (!hasFocus) {
+//                        if (mAnswers[local_position] == null) {
+//                            mAnswers[local_position] = new Answer();
+//                        }
+//                        mAnswers[local_position].setAnswer(((EditText) v).getText().toString());
+//                    }
+//                }
+//            });
 
 
         return convertView;

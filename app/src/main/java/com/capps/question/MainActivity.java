@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mManager=getFragmentManager();
 
         if(mManager.findFragmentByTag(tagAdmin) ==null) {
+            mPass = null;
             FragmentTransaction transaction = mManager.beginTransaction();
             transaction.replace(R.id.content, new AdminContentFrag(), tagAdmin);
             transaction.commit();
@@ -65,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mManager=getFragmentManager();
 
         if (mManager.findFragmentByTag(tagEmployee) == null) {
+            mEmail = mName = null;
             FragmentTransaction transaction = mManager.beginTransaction();
             transaction.replace(R.id.content, new EmployeeContentFrag(), tagEmployee);
             transaction.commit();
@@ -91,6 +94,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 Intent questionIntent=new Intent(this, QuestionActivity.class);
                 questionIntent.putExtra(QuestionActivity.IS_ADMIN_KEY,true);
+                //clear data when login success
+                mPass.setText("");
 
                 startActivity(questionIntent);
             }else
@@ -121,7 +126,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (user != null) {
                 welcomeEmployee(user);
                 return;
-            } else {
+            }
+            else
+            {
                 if (mName.getText().toString().isEmpty() || mName.getText().toString().equals(" ")) {
                     Toast.makeText(this, R.string.emailName, Toast.LENGTH_LONG).show();
                     return;
@@ -129,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 user = new User(mEmail.getText().toString(), mName.getText().toString());
                 long idRow = User.createUser(this, user);
                 if (idRow > -1) {
+                    user.setId((int) idRow);
                     welcomeEmployee(user);
                     return;
                 }
@@ -160,6 +168,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Intent questionIntent=new Intent(this, QuestionActivity.class);
         questionIntent.putExtra(QuestionActivity.IS_ADMIN_KEY,false);
+        //clear data when login success
+        mEmail.setText("");
+        mName.setText("");
+        QuestionActivity.CURRENT_USER_ID = (short) user.getId();
+
         startActivity(questionIntent);
     }
 

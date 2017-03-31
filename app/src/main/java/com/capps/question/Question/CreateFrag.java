@@ -95,7 +95,7 @@ public class CreateFrag extends Fragment implements AdapterView.OnItemSelectedLi
         * get&check Answers
         * save Question & Answers
         * show message to user (Success|failed)
-        * clear data if save success*/ //TODO::NOt Code it yet.
+        * clear data if save success*/ //TODO::Not Code it yet.
 
         //check if editTExt Question not Empty and more than 11
         if (editTextQuestion.getText().toString().isEmpty() || editTextQuestion.getText().toString().length()<12){
@@ -130,11 +130,19 @@ public class CreateFrag extends Fragment implements AdapterView.OnItemSelectedLi
         //Show Message to User Save Success OR Save Failed
         if (resulte){
             Toast.makeText(getActivity(),R.string.saveQuestionAndAnswersSuccessful,Toast.LENGTH_SHORT).show(); //TODO::LENGTH_LONG
+            //clear data in textBoxs when save Success
+            editTextQuestion.setText("");
+            changeFragment(new ListAnswerFrag(),0);
+
         }
         else
         {
             Toast.makeText(getActivity(),R.string.saveQuestionAndAnswersFailed,Toast.LENGTH_SHORT).show();
         }
+
+
+
+
 
 
 
