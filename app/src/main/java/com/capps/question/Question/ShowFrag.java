@@ -73,18 +73,35 @@ public class ShowFrag extends Fragment implements View.OnClickListener {
             mAnswers = Answer.getAllAnswers(getActivity(),question_id);
             mListAnswerFrag =new ListAnswerFrag();
 
+            includeFragment(mListAnswerFrag,mAnswers.length,mAnswers.clone());
+
             //put users//TODO::
         }
         else
         {
             Question firstQuestion =Question.firstQuestion(getActivity());
-            question_id = (short) firstQuestion.getmId();
-            //put Question
-            question.setText(firstQuestion.getmQuestion());
-            //put answers
-            mAnswers = Answer.getAllAnswers(getActivity(),firstQuestion.getmId());
-            mListAnswerFrag =new ListAnswerFrag();
-            //put users
+            if (firstQuestion != null) {
+                question_id = (short) firstQuestion.getmId();
+                //put Question
+                question.setText(firstQuestion.getmQuestion());
+                //put answers
+                mAnswers = Answer.getAllAnswers(getActivity(), firstQuestion.getmId());
+                mListAnswerFrag = new ListAnswerFrag();
+
+                includeFragment(mListAnswerFrag,mAnswers.length,mAnswers.clone());
+                //put users
+            }else{
+                question.setText(R.string.emptyQuestionDB);
+                buttonNextQuestion.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(getActivity(),R.string.emptyQuestionDB,Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+            }
+
 
 
 
@@ -99,7 +116,7 @@ public class ShowFrag extends Fragment implements View.OnClickListener {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        includeFragment(mListAnswerFrag,mAnswers.length,mAnswers.clone());
+//        includeFragment(mListAnswerFrag,mAnswers.length,mAnswers.clone());
     }
 
     @Override

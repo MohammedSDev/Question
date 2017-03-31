@@ -16,12 +16,13 @@
     <item name="questionActivity" type="id">QuestionActivity</item>
     <item name="buttonSaveNewQuestion" type="id">buttonSaveNewQuestion</item>
     <item name="buttonListAllQues" type="id">buttonListAllQues</item>
-    <item name="buttonUsers" type="id">buttonUsers</item>
+    <!--<item name="buttonUsers" type="id">buttonUsers</item>-->
     <item name="edutTextQuestion" type="id">editTExtQuestion</item>
     <item name="contentAnswer" type="id">contentAnswer</item>
     <item name="textViewQuestion" type="id">extViewQuestion</item>
     <item name="buttonNextQuestion" type="id">buttonNextQuestion</item>
     <item name="textViewResultSuccessFailed" type="id">textViewResultSuccessFailed</item>
     <item name="textViewResult" type="id">textViewResult</item>
+    <item name="buttonListAllUsers" type="id">buttonListAllUsers</item>
 
 </resources>

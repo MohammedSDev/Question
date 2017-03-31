@@ -24,14 +24,17 @@ public class AppDataBase extends SQLiteOpenHelper {
     public static final String ID_COLUMN="id";
 
     private final static String DB_NAME = "QUESTION_DB";
-    private static int DB_VERSION = 3;
+    private static int DB_VERSION = 4;
     private static AppDataBase INSTANCE=null;
 
     public static final String USER_T = "users";
     public static final String USER_COLUMN_NAME = "name";
     public static final String USER_COLUMN_EMAIL = "email";
-    private final String USER_COLUMN_ADMIN = "admin";
-    private final String USER_COLUMN_PASS = "pass ";
+    public static final String USER_COLUMN_ADMIN = "admin";
+    private final String USER_COLUMN_PASS = "pass";
+    public static final String USER_COLUMN_POINT = "point";
+    public static final String USER_COLUMN_FULL_MARK = "full_mark";
+
 
     public static final String QUESTION_T = "questions";
     public static final String QUESTION_COLUMN_QUESTION= "question";
@@ -59,6 +62,8 @@ public class AppDataBase extends SQLiteOpenHelper {
                                                         USER_COLUMN_NAME + " VARCHAR(51) NOT NULL," +
                                                         USER_COLUMN_EMAIL + " VARCHAR(51) UNIQUE NOT NULL," +
                                                         USER_COLUMN_PASS + "  VARCHAR(21)," +
+                                                        USER_COLUMN_POINT + "  int," +
+                                                        USER_COLUMN_FULL_MARK + "  int," +
                                                         USER_COLUMN_ADMIN + " boolean DEFAULT (0)" +
                                                         ");";
         String insertAdmin = "INSERT INTO " + USER_T + " (" + USER_COLUMN_EMAIL + "," + USER_COLUMN_NAME + "," + USER_COLUMN_PASS + "," + USER_COLUMN_ADMIN + ")" +
@@ -75,7 +80,7 @@ public class AppDataBase extends SQLiteOpenHelper {
 
 
 
-//        db.execSQL(createUserT);//TODO::cancle Comment
+        db.execSQL(createUserT);
         db.execSQL(insertAdmin);
         db.execSQL(createQuestionT);
         db.execSQL(createAnswerT);
@@ -84,8 +89,8 @@ public class AppDataBase extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-    //TODO:: now  :: update DB...drop and recreated....?
-//        db.execSQL("DROP TABLE IF EXISTS " + USER_T);//TODO::cancle Comment
+
+        db.execSQL("DROP TABLE IF EXISTS " + USER_T);
         db.execSQL("DROP TABLE IF EXISTS " + QUESTION_T);
         db.execSQL("DROP TABLE IF EXISTS " + ANSWER_T);
         onCreate(db);
@@ -140,6 +145,8 @@ public class AppDataBase extends SQLiteOpenHelper {
     }
 
 
+
+
     //Users Method
 
     //create
@@ -172,6 +179,20 @@ public class AppDataBase extends SQLiteOpenHelper {
                           " WHERE " +USER_COLUMN_PASS +" = ?";
 
         if (getRow(command,pass).moveToFirst())
+            return true;
+        else
+            return false;
+    }
+    //save points to db
+    public boolean savePoint(short user_id,short point,short fullMark){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(USER_COLUMN_POINT,point);
+        values.put(USER_COLUMN_FULL_MARK,fullMark);
+
+
+        int rows = db.update(USER_T,values, ID_COLUMN + " = ?;",new String[]{user_id + ""});
+        if (rows > 0)
             return true;
         else
             return false;

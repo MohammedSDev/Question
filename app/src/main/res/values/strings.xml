@@ -25,6 +25,8 @@
     <string name="result">Result</string>
     <string name="success">Success</string>
     <string name="failed">Failed</string>
+    <string name="emptyQuestionDB">No Question In yet..</string>
+    <string name="noMark">No Mark Yet</string>
 
 
     <string-array name="numberOptionAnswer">

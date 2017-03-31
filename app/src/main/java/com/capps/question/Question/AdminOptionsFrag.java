@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.capps.question.Login.UsersFrag;
 import com.capps.question.R;
 
 /**
@@ -42,7 +43,7 @@ public class AdminOptionsFrag extends Fragment implements View.OnClickListener {
 
         Button newQuestion,listUsers,listAllQuestions;
         newQuestion = (Button) view.findViewById(R.id.buttonSaveNewQuestion);
-        listUsers= (Button) view.findViewById(R.id.buttonUsers);
+        listUsers= (Button) view.findViewById(R.id.buttonListAllUsers);
         listAllQuestions = (Button) view.findViewById(R.id.buttonListAllQues);
 
         newQuestion.setOnClickListener(this);
@@ -59,6 +60,7 @@ public class AdminOptionsFrag extends Fragment implements View.OnClickListener {
         switch (v.getId()){
             case R.id.buttonSaveNewQuestion: host.changeFragment(new CreateFrag());break;
             case R.id.buttonListAllQues:host.changeFragment(new Index());break;
+            case R.id.buttonListAllUsers:host.changeFragment(new UsersFrag());break;
             //TODO:: add User Fragment.
         }
     }

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.capps.question.Login.User;
 import com.capps.question.R;
 
 /**
@@ -50,10 +51,19 @@ public class ResultFrag extends Fragment {
         }
 
 
+        User.saveThePoint(getActivity(),QuestionActivity.CURRENT_USER_ID,(short)result,(short)fullMark);
+
         return view;
     }
 
-    private void setTheColor(TextView textViewResult, TextView textViewResultSuccessFailed,int color) {
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+
+    }
+
+    private void setTheColor(TextView textViewResult, TextView textViewResultSuccessFailed, int color) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             textViewResultSuccessFailed.setTextColor(getResources().getColor(color,null));
             textViewResult.setTextColor(getResources().getColor(color,null));

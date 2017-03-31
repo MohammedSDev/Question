@@ -19,10 +19,13 @@ public class QuestionActivity extends Activity implements AdminOptionsFrag.Admin
 
     public static Context appContext;
     private FragmentManager mManager;
+    public static short CURRENT_USER_ID;
 
 
 
     public static final String IS_ADMIN_KEY = "isAdmin";
+    private final String USER_ID = "user_id";
+
 
 
     @Override
@@ -30,6 +33,10 @@ public class QuestionActivity extends Activity implements AdminOptionsFrag.Admin
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question);
         QuestionActivity.appContext = this;
+
+        if (savedInstanceState != null){
+            CURRENT_USER_ID = savedInstanceState.getShort(USER_ID);// TODO: 31/3/17 check if static value are going when upside the mobile
+        }
 
 
         mManager = getFragmentManager();
@@ -59,6 +66,7 @@ public class QuestionActivity extends Activity implements AdminOptionsFrag.Admin
         super.onSaveInstanceState(outState);
 
         outState.putBoolean(IS_ADMIN_KEY,getIntent().getBooleanExtra(IS_ADMIN_KEY,false));
+        outState.putShort(USER_ID,CURRENT_USER_ID);
     }
 
     @Override
