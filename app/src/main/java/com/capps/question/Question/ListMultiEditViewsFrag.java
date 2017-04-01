@@ -69,4 +69,10 @@ public class ListMultiEditViewsFrag extends ListFragment {
         outState.putBoolean(mNotAllowUserToInbut, notAllowUserToInbut);
         outState.putBoolean(mIsShowAnswers, isShowAnswers);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        MultiEditViewAdapter.Answers = null;
+    }
 }

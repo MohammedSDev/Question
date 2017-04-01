@@ -74,8 +74,11 @@ public class CreateFrag extends Fragment implements AdapterView.OnItemSelectedLi
         Bundle bundle=new Bundle();
         bundle.putInt(ListMultiEditViewsFrag.EDITTEXT_COUNT_KEY,editTextCount);
         bundle.putBoolean(ListMultiEditViewsFrag.mNotAllowUserToInbut,false);
-        if (mAnswer != null)
+        if (mAnswer != null){
             bundle.putSerializable(ListMultiEditViewsFrag.ANSWER_DATA_KEY,mAnswer);//in case user change number of spinner,so should keep pervaris values
+            mAnswer = null;
+        }
+
 //        bundle.putBoolean(ListMultiEditViewsFrag.mIsShowAnswers,true);  //No Data to show in create ..it will be entered by user
         frag.setArguments(bundle);
         FragmentTransaction transaction = mManager.beginTransaction();

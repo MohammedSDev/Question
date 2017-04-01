@@ -39,18 +39,21 @@ public class MultiEditViewAdapter extends BaseAdapter {
         if (answers != null)
         {
             if (mCount > answers.length){
-                Answer []oldANswers = MultiEditViewAdapter.Answers;
+//                Answer []oldANswers = MultiEditViewAdapter.Answers;
+//                Answer []oldANswers = answers;
                 MultiEditViewAdapter.Answers = new Answer[mCount];
-                for (short i=0;i<oldANswers.length;i++)
-                    MultiEditViewAdapter.Answers[i] = oldANswers[i];
+                for (short i=0;i<answers.length;i++)
+                    MultiEditViewAdapter.Answers[i] = answers[i];
             }
             else if (mCount < answers.length)
             {
-                Answer []oldANswers = MultiEditViewAdapter.Answers;
+//                Answer []oldANswers = MultiEditViewAdapter.Answers;
                 MultiEditViewAdapter.Answers = new Answer[mCount];
                 for (short i=0;i < mCount;i++)
-                    MultiEditViewAdapter.Answers[i] = oldANswers[i];
+                    MultiEditViewAdapter.Answers[i] = answers[i];
             }
+            else
+                MultiEditViewAdapter.Answers = answers;
         }
         else
             MultiEditViewAdapter.Answers = new Answer[mCount];
@@ -91,6 +94,42 @@ public class MultiEditViewAdapter extends BaseAdapter {
             holder.checkBox = (CheckBox) convertView.findViewById(R.id.rowListCheckBoxtQuestion);
 
 
+            //put listener
+            //if view is not enable..no needed listener any more.
+            if (holder.checkBox.isEnabled())
+                holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (Answers[local_position] == null)
+                            Answers[local_position] = new Answer();
+                        Answers[local_position].setCurrect(isChecked);
+                    }
+                });
+
+            if (holder.editText.isEnabled())
+                holder.editText.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        if (!is_change_text_programmatically){
+                            if (Answers[local_position] == null) {
+                                Answers[local_position] = new Answer();
+                            }
+                            Answers[local_position].setAnswer(s.toString());
+                        }
+                    }
+                });
+
+
             convertView.setTag(holder);
         }
         else
@@ -116,40 +155,7 @@ public class MultiEditViewAdapter extends BaseAdapter {
         }
 
 
-        //put listener
-        //if view is not enable..no needed listener any more.
-        if (holder.checkBox.isEnabled())
-            holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (Answers[local_position] == null)
-                        Answers[local_position] = new Answer();
-                    Answers[local_position].setCurrect(isChecked);
-                }
-            });
 
-        if (holder.editText.isEnabled())
-            holder.editText.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    if (!is_change_text_programmatically){
-                        if (Answers[local_position] == null) {
-                            Answers[local_position] = new Answer();
-                        }
-                        Answers[local_position].setAnswer(s.toString());
-                    }
-                }
-            });
 
 
         return convertView;
