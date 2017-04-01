@@ -14,6 +14,7 @@
     <string name="errorPass">Error Password</string>
     <string name="emptyShortQuestion">Should Write Question from 12 letter at less</string>
     <string name="emptyAnswer">Should Write Answer.2 answer at less</string>
+    <string name="emptyCorrectAnswer">Should have 1 correct answer.at less</string>
     <string name="saveQuestionAndAnswersSuccessful">Save Successful</string>
     <string name="saveQuestionAndAnswersFailed">Save Failed</string>
     <string name="noQuestion">No Question</string>

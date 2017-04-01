@@ -113,11 +113,18 @@ public class CreateFrag extends Fragment implements AdapterView.OnItemSelectedLi
             Toast.makeText(getActivity(),R.string.emptyAnswer,Toast.LENGTH_SHORT).show();
             return;
         }
+        boolean hasAtLessOneCorrectAnswer=false;
         for (Answer a:answers) {
-            if (a == null || (a.getAnswer().isEmpty() || a.getAnswer().equalsIgnoreCase(" ")) ){ //TODO:: equals > equals
+            if (a == null || (a.getAnswer().isEmpty() || a.getAnswer().equals(" ")) ){ //TODO:: equalsIgnorCase > equals
                 Toast.makeText(getActivity(),R.string.emptyAnswer,Toast.LENGTH_SHORT).show();
                 return;
             }
+            if (a.isCurrect())
+                hasAtLessOneCorrectAnswer =true;
+        }
+        if (!hasAtLessOneCorrectAnswer){
+            Toast.makeText(getActivity(),R.string.emptyCorrectAnswer,Toast.LENGTH_SHORT).show();
+            return;
         }
 
 
