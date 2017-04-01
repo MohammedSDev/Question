@@ -26,9 +26,13 @@ public class CreateFrag extends Fragment implements AdapterView.OnItemSelectedLi
 
 
 //    private final String ANSWER_USER_TYPE_KEY="dataAnswer";
+    private final String MobileReover = "mobileOver";
     EditText editTextQuestion;
     FragmentManager mManager;
-    private ListAnswerFrag mListAnswerFrag;
+    private ListMultiEditViewsFrag mListMultiEditViewsFrag;
+    private boolean mIsMobileReover=false;
+    private Answer mAnswer[];
+
 
 
 
@@ -40,10 +44,15 @@ public class CreateFrag extends Fragment implements AdapterView.OnItemSelectedLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.create_question,container,false);
 
+        if (savedInstanceState != null)
+            mIsMobileReover = true;
+//            PERIVIO_ANSWERS = (Answer[]) savedInstanceState.getSerializable(ListAnswerFrag.ANSWER_DATA_KEY);
+
         //TODO::To check:  when no data past to onsaveInstanceState..is it came null or not
+
         mManager = getChildFragmentManager();
-        mListAnswerFrag = new ListAnswerFrag();
-        changeFragment(mListAnswerFrag,0);
+        mListMultiEditViewsFrag = new ListMultiEditViewsFrag();
+        //changeFragment(mListAnswerFrag,0);
 
         Spinner numberOptionsAnswer = (Spinner) view.findViewById(R.id.spinnerNumberOption);
         Button buttonSave = (Button) view.findViewById(R.id.buttonSaveNewQuestion);
@@ -61,19 +70,17 @@ public class CreateFrag extends Fragment implements AdapterView.OnItemSelectedLi
         return  view;
     }
 
-    private void changeFragment(ListAnswerFrag frag,int editTextCount) {
+    private void changeFragment(ListMultiEditViewsFrag frag,int editTextCount) {
         Bundle bundle=new Bundle();
-        bundle.putInt(ListAnswerFrag.EDITTEXT_COUNT_KEY,editTextCount);
+        bundle.putInt(ListMultiEditViewsFrag.EDITTEXT_COUNT_KEY,editTextCount);
+        bundle.putBoolean(ListMultiEditViewsFrag.mNotAllowUserToInbut,false);
+        if (mAnswer != null)
+            bundle.putSerializable(ListMultiEditViewsFrag.ANSWER_DATA_KEY,mAnswer);//in case user change number of spinner,so should keep pervaris values
+//        bundle.putBoolean(ListMultiEditViewsFrag.mIsShowAnswers,true);  //No Data to show in create ..it will be entered by user
         frag.setArguments(bundle);
         FragmentTransaction transaction = mManager.beginTransaction();
         transaction.replace(R.id.content,frag);
         transaction.commit();
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
     }
 
 
@@ -81,9 +88,14 @@ public class CreateFrag extends Fragment implements AdapterView.OnItemSelectedLi
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
+//        outState.putSerializable();
+
         //QuestionAdapter adapter = (QuestionAdapter) getListAdapter();
         //outState.putSerializable(ANSWER_USER_TYPE_KEY,adapter.getData());//TODO::Should Throw Error,Because Answer not implement Serializable
 //        outState.putSerializable(ANSWER_USER_TYPE_KEY,QuestionAdapter.mAnswers);
+//        Answer [] answers =mListAnswerFrag.mQuestionAdapter.getData();
+
+//        outState.putSerializable(ListAnswerFrag.ANSWER_DATA_KEY,answers);
     }
 
     @Override
@@ -108,7 +120,7 @@ public class CreateFrag extends Fragment implements AdapterView.OnItemSelectedLi
 
 
 //        Answer []answers = mManager.findFragmentByTag(R.id.content).getdata//TODO:: create getData Method
-        Answer []answers= mListAnswerFrag.mQuestionAdapter.getData();
+        Answer []answers= mListMultiEditViewsFrag.multiEditViewAdapter.getAnswers();
         if (answers.length<2){
             Toast.makeText(getActivity(),R.string.emptyAnswer,Toast.LENGTH_SHORT).show();
             return;
@@ -139,7 +151,7 @@ public class CreateFrag extends Fragment implements AdapterView.OnItemSelectedLi
             Toast.makeText(getActivity(),R.string.saveQuestionAndAnswersSuccessful,Toast.LENGTH_SHORT).show(); //TODO::LENGTH_LONG
             //clear data in textBoxs when save Success
             editTextQuestion.setText("");
-            changeFragment(new ListAnswerFrag(),0);
+            changeFragment(new ListMultiEditViewsFrag(),0);
 
         }
         else
@@ -161,9 +173,17 @@ public class CreateFrag extends Fragment implements AdapterView.OnItemSelectedLi
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        int count = position + 1;
-        mListAnswerFrag = new ListAnswerFrag();
-        changeFragment(mListAnswerFrag,count);
+        if (mIsMobileReover){
+            mIsMobileReover = false;
+        }
+        else
+        {
+            int count = position + 1;
+            mListMultiEditViewsFrag = new ListMultiEditViewsFrag();
+            mAnswer = MultiEditViewAdapter.Answers;
+            changeFragment(mListMultiEditViewsFrag,count);
+        }
+
     }
 
     @Override

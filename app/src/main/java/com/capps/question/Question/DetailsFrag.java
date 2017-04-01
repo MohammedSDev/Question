@@ -3,17 +3,14 @@ package com.capps.question.Question;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.capps.question.Answer;
-import com.capps.question.AppDataBase;
 import com.capps.question.R;
 
 /**
@@ -24,7 +21,7 @@ public class DetailsFrag extends Fragment {
 
     final static String QUESTION_KEY="question";
     final static String QUESTION_ID_KEY="Qid";
-    private ListAnswerFrag mListAnswerFrag;
+    private ListMultiEditViewsFrag listMultiEditViewsFrag;
     private Answer []mAnswers;
 
 
@@ -41,7 +38,7 @@ public class DetailsFrag extends Fragment {
             question.setText(bundle.getString(QUESTION_KEY));
             //put answers
             mAnswers = Answer.getAllAnswers(getActivity(),bundle.getInt(QUESTION_ID_KEY));
-            mListAnswerFrag =new ListAnswerFrag();
+            listMultiEditViewsFrag =new ListMultiEditViewsFrag();
 
             //put users//TODO::
         }
@@ -63,14 +60,16 @@ public class DetailsFrag extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        changeFragment(mListAnswerFrag,mAnswers.length,mAnswers);
+        changeFragment(listMultiEditViewsFrag,mAnswers.length,mAnswers);
     }
 
-    private void changeFragment(ListAnswerFrag frag, int editTextCount, Answer [] answers) {
+    private void changeFragment(ListMultiEditViewsFrag frag, int editTextCount, Answer [] answers) {
         FragmentManager manager = getChildFragmentManager();
         Bundle bundle=new Bundle();
-        bundle.putInt(ListAnswerFrag.EDITTEXT_COUNT_KEY,editTextCount);
-        bundle.putSerializable(ListAnswerFrag.ANSWER_DATA_KEY,answers);//TODO:: Should throw Exception..because it's not implement Serializable
+        bundle.putInt(ListMultiEditViewsFrag.EDITTEXT_COUNT_KEY,editTextCount);
+        bundle.putSerializable(ListMultiEditViewsFrag.ANSWER_DATA_KEY,answers);//TODO:: Should throw Exception..because it's not implement Serializable
+        bundle.putBoolean(ListMultiEditViewsFrag.mNotAllowUserToInbut,true);
+        bundle.putBoolean(ListMultiEditViewsFrag.mIsShowAnswers,true);
         frag.setArguments(bundle);
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.contentAnswer,frag);

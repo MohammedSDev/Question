@@ -44,14 +44,19 @@ public class QuestionActivity extends Activity implements AdminOptionsFrag.Admin
         //check is admin or Employee is logged
         //get data from savedInstanceState or intent
         //from savedInstanceState(in case phone over change) or from intent(in case create first/new this activity)
-        if( (savedInstanceState!= null && savedInstanceState.getBoolean(IS_ADMIN_KEY)) || getIntent().getBooleanExtra(IS_ADMIN_KEY,false)){
-          includeFragment(new AdminOptionsFrag());
-        }//another wise ,Employee login
-        else
-        {
-            ShowFrag.POINTS = 0;
-            includeFragment(new ShowFrag());
+        if (savedInstanceState == null){
+            if (getIntent().getBooleanExtra(IS_ADMIN_KEY,false))
+            {
+                includeFragment(new AdminOptionsFrag());
+            }
+            else
+            {
+                ShowFrag.POINTS = 0;
+                includeFragment(new ShowFrag());
+            }
+
         }
+
     }
 
     private void includeFragment(Fragment frag) {

@@ -28,7 +28,7 @@ public class ShowFrag extends Fragment implements View.OnClickListener {
     static short POINTS = 0;//it's assigning to zero in QuestionActivity after login
     final static String QUESTION_KEY="question";
     final static String QUESTION_ID_KEY="Qid";
-    private ListAnswerFrag mListAnswerFrag;
+    private ListMultiEditViewsFrag mListMultiEditViewsFrag;
     private Answer []mAnswers;
     short question_id;
 
@@ -71,9 +71,9 @@ public class ShowFrag extends Fragment implements View.OnClickListener {
             //put answers
             question_id = (short) bundle.getInt(QUESTION_ID_KEY);
             mAnswers = Answer.getAllAnswers(getActivity(),question_id);
-            mListAnswerFrag =new ListAnswerFrag();
+            mListMultiEditViewsFrag =new ListMultiEditViewsFrag();
 
-            includeFragment(mListAnswerFrag,mAnswers.length,mAnswers.clone());
+            includeFragment(mListMultiEditViewsFrag,mAnswers.length,mAnswers.clone());
 
             //put users//TODO::
         }
@@ -86,9 +86,9 @@ public class ShowFrag extends Fragment implements View.OnClickListener {
                 question.setText(firstQuestion.getmQuestion());
                 //put answers
                 mAnswers = Answer.getAllAnswers(getActivity(), firstQuestion.getmId());
-                mListAnswerFrag = new ListAnswerFrag();
+                mListMultiEditViewsFrag = new ListMultiEditViewsFrag();
 
-                includeFragment(mListAnswerFrag,mAnswers.length,mAnswers.clone());
+                includeFragment(mListMultiEditViewsFrag,mAnswers.length,mAnswers.clone());
                 //put users
             }else{
                 question.setText(R.string.emptyQuestionDB);
@@ -129,11 +129,8 @@ public class ShowFrag extends Fragment implements View.OnClickListener {
 
 
 
-    private void includeFragment(ListAnswerFrag frag, int editTextCount, Answer [] answers)  {
+    private void includeFragment(ListMultiEditViewsFrag frag, int editTextCount, Answer [] answers)  {
 
-        FragmentManager manager = getChildFragmentManager();
-        Bundle bundle=new Bundle();
-        bundle.putInt(ListAnswerFrag.EDITTEXT_COUNT_KEY,editTextCount);
 
         //create copy from answers and remove correct from it
         Answer[] answersClone = new Answer[answers.length];
@@ -144,7 +141,13 @@ public class ShowFrag extends Fragment implements View.OnClickListener {
             }
         }
         catch (CloneNotSupportedException er){Log.d("error","error clone answers on showfrag");}
-        bundle.putSerializable(ListAnswerFrag.ANSWER_DATA_KEY,answersClone);//TODO:: Should throw Exception..because it's not implement Serializable
+
+        FragmentManager manager = getChildFragmentManager();
+        Bundle bundle=new Bundle();
+        bundle.putInt(ListMultiEditViewsFrag.EDITTEXT_COUNT_KEY,editTextCount);
+        bundle.putSerializable(ListMultiEditViewsFrag.ANSWER_DATA_KEY,answersClone);//TODO:: Should throw Exception..because it's not implement Serializable
+        bundle.putBoolean(ListMultiEditViewsFrag.mNotAllowUserToInbut,false);
+        bundle.putBoolean(ListMultiEditViewsFrag.mIsShowAnswers,false);
         frag.setArguments(bundle);
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.contentAnswer,frag);
@@ -257,7 +260,7 @@ public class ShowFrag extends Fragment implements View.OnClickListener {
         * next Question*/
 
 
-        Answer []userAnswers = mListAnswerFrag.mQuestionAdapter.getData();
+        Answer []userAnswers = mListMultiEditViewsFrag.multiEditViewAdapter.getAnswers();
         if (!isUserChooseAnyAnswer(userAnswers)){
             Toast.makeText(getActivity(),R.string.choiceAtLessOneAnswer,Toast.LENGTH_SHORT).show();
             return;

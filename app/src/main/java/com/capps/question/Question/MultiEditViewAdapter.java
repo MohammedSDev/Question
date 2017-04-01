@@ -16,47 +16,45 @@ import com.capps.question.Answer;
 import com.capps.question.R;
 
 /**
- * Created by varun on 24/3/17.
+ * Created by varun on 1/4/17.
  */
 
-public class QuestionAdapter extends BaseAdapter implements CompoundButton.OnCheckedChangeListener {
+public class MultiEditViewAdapter extends BaseAdapter {
+
+
 
     private int mCount;
     private Context mContext;
-    private Answer [] mAnswers;
+    static Answer[] Answers;
     private boolean mNotAllowUserToInbut =false;
-    private boolean mIsShowScreen = false;
+    private boolean mIsShowAnswers = false;
     private boolean is_change_text_programmatically =false;//Beacuse textBox has listener text change,and we don't want to listen to programmatically changing.
 
 
-    //Use this Constrictor when you dont have any pervaio answers(ex: new Question with new Answers)
-    public QuestionAdapter(int mCount, Context mContext) {
+    public MultiEditViewAdapter(int mCount, Context mContext, Answer[] answers, boolean mNotAllowUserToInbut, boolean mIsShowAnswers) {
         this.mCount = mCount;
         this.mContext = mContext;
-        mAnswers = new Answer[mCount];
-
-
-    }
-
-    //Use this Constrictor when you  have any pervaio answers(ex: Detail the Question OR Edit it Or Show Question)
-    public QuestionAdapter(int mCount,Answer []answers, Context mContext) {
-        this.mCount = answers.length;
-        this.mContext = mContext;
-        this.mAnswers = answers;
-        mNotAllowUserToInbut = true;//TO break user change the answer,just show the answer(ex::details QuestionScreen & Show Question Secreen(editTExt only))
-
-        isShowFrag(answers);//if is showScreen =true, it will let user to change the checkbox only.(In case ShowScreen only)
-
-    }
-
-    private void isShowFrag(Answer[] answers) {
-        for (Answer a: answers) {
-            if (a.isCurrect())
-                return ;// TODO: 30/3/17  check is beak the loop
+        this.mNotAllowUserToInbut = mNotAllowUserToInbut;
+        this.mIsShowAnswers = mIsShowAnswers;
+        if (answers != null)
+        {
+            if (mCount > answers.length){
+                Answer []oldANswers = MultiEditViewAdapter.Answers;
+                MultiEditViewAdapter.Answers = new Answer[mCount];
+                for (short i=0;i<oldANswers.length;i++)
+                    MultiEditViewAdapter.Answers[i] = oldANswers[i];
+            }
+            else if (mCount < answers.length)
+            {
+                Answer []oldANswers = MultiEditViewAdapter.Answers;
+                MultiEditViewAdapter.Answers = new Answer[mCount];
+                for (short i=0;i < mCount;i++)
+                    MultiEditViewAdapter.Answers[i] = oldANswers[i];
+            }
         }
-        mIsShowScreen=true;
+        else
+            MultiEditViewAdapter.Answers = new Answer[mCount];
     }
-
 
     @Override
     public int getCount() {
@@ -65,8 +63,10 @@ public class QuestionAdapter extends BaseAdapter implements CompoundButton.OnChe
 
     @Override
     public Object getItem(int position) {
-
-        return mAnswers[position];
+        if (Answers != null)
+            return Answers[position];
+        else
+        return null;
     }
 
     @Override
@@ -86,39 +86,45 @@ public class QuestionAdapter extends BaseAdapter implements CompoundButton.OnChe
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.row_listview_questions, parent, false);
 
-            holder = new Holder();
+            holder = new MultiEditViewAdapter.Holder();
             holder.editText = (EditText) convertView.findViewById(R.id.rowListEditTExtQuestion);
             holder.checkBox = (CheckBox) convertView.findViewById(R.id.rowListCheckBoxtQuestion);
 
 
             convertView.setTag(holder);
-        } else {
+        }
+        else
+        {
             holder = (Holder) convertView.getTag();
         }
 
-        if (mAnswers[position] != null) {
+
+        //put answers in EditBox and checkbox
+        if (Answers[position] != null) {
             is_change_text_programmatically =true;
-            holder.editText.setText(mAnswers[position].getAnswer());
+            holder.editText.setText(Answers[position].getAnswer());
             is_change_text_programmatically =false;
-            holder.checkBox.setChecked(mAnswers[position].isCurrect());
+            holder.checkBox.setChecked(Answers[position].isCurrect());
         }
 
         //this to pervient user from change answers..(showQuestion Screen:textBox:false & DetailQuestion Screen textBox_CheckBox:false)
         // Another way..user is Allow To change Answers..(CreateQuestion Screen & EditQuestion Screen)
         if (mNotAllowUserToInbut) {
             holder.editText.setEnabled(false);
-            if (!mIsShowScreen)
+            if (!mIsShowAnswers)
                 holder.checkBox.setEnabled(false);
         }
 
+
+        //put listener
         //if view is not enable..no needed listener any more.
         if (holder.checkBox.isEnabled())
             holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (mAnswers[local_position] == null)
-                        mAnswers[local_position] = new Answer();
-                    mAnswers[local_position].setCurrect(isChecked);
+                    if (Answers[local_position] == null)
+                        Answers[local_position] = new Answer();
+                    Answers[local_position].setCurrect(isChecked);
                 }
             });
 
@@ -137,62 +143,27 @@ public class QuestionAdapter extends BaseAdapter implements CompoundButton.OnChe
                 @Override
                 public void afterTextChanged(Editable s) {
                     if (!is_change_text_programmatically){
-                        if (mAnswers[local_position] == null) {
-                            mAnswers[local_position] = new Answer();
+                        if (Answers[local_position] == null) {
+                            Answers[local_position] = new Answer();
                         }
-                        mAnswers[local_position].setAnswer(s.toString());
+                        Answers[local_position].setAnswer(s.toString());
                     }
                 }
             });
-
-
-//            holder.editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//                @Override
-//                public void onFocusChange(View v, boolean hasFocus) {
-//                    if (!hasFocus) {
-//                        if (mAnswers[local_position] == null) {
-//                            mAnswers[local_position] = new Answer();
-//                        }
-//                        mAnswers[local_position].setAnswer(((EditText) v).getText().toString());
-//                    }
-//                }
-//            });
 
 
         return convertView;
     }
 
 
-
-
-
-
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//        int position = (int) buttonView.getTag(); //TODO:: How can I access posision from here..or i should declare & use  new variable
-//        if (mAnswers[position] == null)
-//            mAnswers[position] = new Answer();
-//        mAnswers[position].setCurrect(isChecked);
+    public Answer[] getAnswers(){
+        return Answers;
     }
-
-
-
 
     class Holder {
         EditText editText;
         CheckBox checkBox;
 
-        }
-
-
-
-    public Answer[] getData(){
-        return mAnswers;
-    }
-
-    public void setNotAllowUserToInbut() {
-            mNotAllowUserToInbut = false;
     }
 
 }
