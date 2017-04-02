@@ -36,27 +36,22 @@ public class MultiEditViewAdapter extends BaseAdapter {
         this.mContext = mContext;
         this.mNotAllowUserToInbut = mNotAllowUserToInbut;
         this.mIsShowAnswers = mIsShowAnswers;
+        MultiEditViewAdapter.Answers = new Answer[mCount];
+
         if (answers != null)
         {
             if (mCount > answers.length){
-//                Answer []oldANswers = MultiEditViewAdapter.Answers;
-//                Answer []oldANswers = answers;
-                MultiEditViewAdapter.Answers = new Answer[mCount];
                 for (short i=0;i<answers.length;i++)
                     MultiEditViewAdapter.Answers[i] = answers[i];
             }
             else if (mCount < answers.length)
             {
-//                Answer []oldANswers = MultiEditViewAdapter.Answers;
-                MultiEditViewAdapter.Answers = new Answer[mCount];
                 for (short i=0;i < mCount;i++)
                     MultiEditViewAdapter.Answers[i] = answers[i];
             }
             else
                 MultiEditViewAdapter.Answers = answers;
         }
-        else
-            MultiEditViewAdapter.Answers = new Answer[mCount];
     }
 
     @Override
@@ -78,9 +73,11 @@ public class MultiEditViewAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        Log.d("position", position + "");
-        final int local_position = position;
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        if (Answers[position] != null)
+            Log.d("position", "position:" + position + ",AnswerItem:" + Answers[position].getAnswer());
+        else
+            Log.d("position", "position:" + position + ",AnswerItem:" + Answers[position]);
 
         Holder holder;
         if (convertView == null) {
@@ -88,26 +85,44 @@ public class MultiEditViewAdapter extends BaseAdapter {
 //            convertView = LayoutInflater.from(mContext).inflate(R.layout.row_listview_questions,parent);//TODO Why Error
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.row_listview_questions, parent, false);
+            holder = new MultiEditViewAdapter.Holder(convertView);
 
-            holder = new MultiEditViewAdapter.Holder();
-            holder.editText = (EditText) convertView.findViewById(R.id.rowListEditTExtQuestion);
-            holder.checkBox = (CheckBox) convertView.findViewById(R.id.rowListCheckBoxtQuestion);
+            convertView.setTag(holder);
+        }
+        else
+        {
+            holder = (Holder) convertView.getTag();
+            holder.editText.clearFocus();
+            holder.editText.removeTextChangedListener(holder.textWatcher);
+            Log.d("position","oldText:" + holder.editText.getText().toString());
 
+        }
+
+        //this to pervient user from change answers..(showQuestion Screen:textBox:false & DetailQuestion Screen textBox_CheckBox:false)
+        // Another way..user is Allow To change Answers..(CreateQuestion Screen & EditQuestion Screen)
+        if (mNotAllowUserToInbut) {
+            holder.editText.setEnabled(false);
+            if (!mIsShowAnswers)
+                holder.checkBox.setEnabled(false);
+        }
 
             //put listener
             //if view is not enable..no needed listener any more.
-            if (holder.checkBox.isEnabled())
+            if (holder.checkBox.isEnabled()){
                 holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (Answers[local_position] == null)
-                            Answers[local_position] = new Answer();
-                        Answers[local_position].setCurrect(isChecked);
+                        if (Answers[position] == null)
+                            Answers[position] = new Answer();
+                        if (!is_change_text_programmatically)
+                            Answers[position].setCurrect(isChecked);
                     }
                 });
+            }
 
-            if (holder.editText.isEnabled())
-                holder.editText.addTextChangedListener(new TextWatcher() {
+
+            if (holder.editText.isEnabled()){
+                holder.textWatcher = new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -121,38 +136,36 @@ public class MultiEditViewAdapter extends BaseAdapter {
                     @Override
                     public void afterTextChanged(Editable s) {
                         if (!is_change_text_programmatically){
-                            if (Answers[local_position] == null) {
-                                Answers[local_position] = new Answer();
+                            if (Answers[position] == null) {
+                                Answers[position] = new Answer();
                             }
-                            Answers[local_position].setAnswer(s.toString());
+                            Answers[position].setAnswer(s.toString());
                         }
                     }
-                });
+                };
+                holder.editText.addTextChangedListener(holder.textWatcher);
+            }
 
 
-            convertView.setTag(holder);
-        }
-        else
-        {
-            holder = (Holder) convertView.getTag();
-        }
+
+
 
 
         //put answers in EditBox and checkbox
+        is_change_text_programmatically =true;
         if (Answers[position] != null) {
-            is_change_text_programmatically =true;
             holder.editText.setText(Answers[position].getAnswer());
-            is_change_text_programmatically =false;
             holder.checkBox.setChecked(Answers[position].isCurrect());
+        }else
+        {
+            Answers[position] = new Answer();
+            holder.editText.setText("");
+            holder.checkBox.setChecked(false);
         }
+        is_change_text_programmatically =false;
 
-        //this to pervient user from change answers..(showQuestion Screen:textBox:false & DetailQuestion Screen textBox_CheckBox:false)
-        // Another way..user is Allow To change Answers..(CreateQuestion Screen & EditQuestion Screen)
-        if (mNotAllowUserToInbut) {
-            holder.editText.setEnabled(false);
-            if (!mIsShowAnswers)
-                holder.checkBox.setEnabled(false);
-        }
+
+
 
 
 
@@ -162,6 +175,8 @@ public class MultiEditViewAdapter extends BaseAdapter {
     }
 
 
+
+
     public Answer[] getAnswers(){
         return Answers;
     }
@@ -169,7 +184,12 @@ public class MultiEditViewAdapter extends BaseAdapter {
     class Holder {
         EditText editText;
         CheckBox checkBox;
+        TextWatcher textWatcher;
 
+        public Holder(View view) {
+            this.editText = (EditText) view.findViewById(R.id.rowListEditTExtQuestion);
+            this.checkBox = (CheckBox) view.findViewById(R.id.rowListCheckBoxtQuestion);
+        }
     }
 
 }
